@@ -36,8 +36,8 @@ At every milestone, verification follows a three-tier loop:
    - Support configurable handling of calculated columns (`AVG`, `OBP`, `SLG`, `OPS`, `FLD PCT`): either formatted decimals (`0.333`) or blank cells (`""`) to preserve sheet formulas.
 
 ### Definition of Done / Verification
-- [ ] `npm test` passes 100% in WSL.
-- [ ] Unit tests cover:
+- [x] `npm test` passes 100% in WSL.
+- [x] Unit tests cover:
   - Standard multi-hit game (`1B`, `2B`, `HR`, `BB`, `K`, `FO`, `GO`, `PO`, `ASSIST`, `E_FLD`).
   - Reached on Batting Error (`E_BAT`) and Fielder's Choice (`FC`) incrementing `AB` without incrementing `H`.
   - Fly Outs (`FO`, including line outs) and Ground Outs (`GO`) tracked separately and both incrementing `AB`.

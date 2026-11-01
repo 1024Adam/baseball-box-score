@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Baseball Box Score",
+    "slug": "baseball-box-score",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "baseball-box-score",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.baseballboxscore.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-asset",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
