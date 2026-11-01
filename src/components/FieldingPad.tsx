@@ -21,9 +21,11 @@ export function FieldingPad({ stats, onRecordFielding }: FieldingPadProps) {
             pressed && styles.pressed,
           ]}
         >
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{stats.po}</Text>
-          </View>
+          {stats.po > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{stats.po}</Text>
+            </View>
+          )}
           <Text style={styles.mainLabel}>PO</Text>
           <Text style={styles.subLabel}>Putout</Text>
         </Pressable>
@@ -37,9 +39,11 @@ export function FieldingPad({ stats, onRecordFielding }: FieldingPadProps) {
             pressed && styles.pressed,
           ]}
         >
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{stats.assists}</Text>
-          </View>
+          {stats.assists > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{stats.assists}</Text>
+            </View>
+          )}
           <Text style={styles.mainLabel}>A</Text>
           <Text style={styles.subLabel}>Assist</Text>
         </Pressable>
@@ -53,11 +57,13 @@ export function FieldingPad({ stats, onRecordFielding }: FieldingPadProps) {
             pressed && styles.pressed,
           ]}
         >
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{stats.errors}</Text>
-          </View>
+          {stats.errors > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{stats.errors}</Text>
+            </View>
+          )}
           <Text style={styles.mainLabel}>E</Text>
-          <Text style={styles.subLabel}>Error (Field)</Text>
+          <Text style={styles.subLabel}>Error</Text>
         </Pressable>
       </View>
     </View>

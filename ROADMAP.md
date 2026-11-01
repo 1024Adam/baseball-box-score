@@ -86,12 +86,12 @@ At every milestone, verification follows a three-tier loop:
      - **Outs:** `FO` (Fly / Line Out), `GO` (Ground Out), `K` (Strikeout)
    - **Zero-Typing RBI Quick Bar:** Simple `0 | +1 | +2 | +3 | +4 RBI` pill selector so RBIs are logged in a single thumb tap (`HR` defaults to `1 RBI` automatically and can be tapped up to `2–4`).
 3. **Fielding Action Pad (`src/components/FieldingPad.tsx`):**
-   - Three large single-tap neutral buttons: **`PO`** (Putout), **`A`** (Assist), and **`E`** (Error (Field)) with immediate counter badges.
+   - Three large single-tap neutral buttons: **`PO`** (Putout), **`A`** (Assist), and **`E`** (Error) with immediate counter badges.
 4. **1-Tap Undo Last Play (`src/components/EventTimeline.tsx`):**
    - Prominent amber/yellow **Undo Last Play** button in the thumb zone (no cluttering play-by-play list on the main screen).
    - Trigger `expo-haptics` light/medium impact on native iOS taps.
-5. **Live Box Score Summary Tile (`src/components/LiveScoreStrip.tsx`):**
-   - Positioned at the bottom of the screen (just above the game Submit / Export actions), showing live batting (`2-for-3 | 2B, HR | 2 RBI | 1 BB | .667 AVG | 1.417 OPS`) and live fielding (`2 PO | 3 A | 0 E | 1.000 FLD`).
+5. **Submit Button (`app/index.tsx` -> `app/summary.tsx`):**
+   - Bottom **`SUMMARY →`** button on the main logging screen navigates to the dedicated Summary & Export screen (`app/summary.tsx`) with a **`← Back`** button and iOS swipe-back gesture.
 
 ### Definition of Done / Verification
 - [x] Start `npx expo start --web` in WSL and record a full game (4 plate appearances + 5 fielding chances + 1 undo) in `<15 seconds` without touching the keyboard.
@@ -100,26 +100,23 @@ At every milestone, verification follows a three-tier loop:
 
 ---
 
-## Milestone 4: Google Sheets Export (TSV Copy, CSV Share, & 1-Tap Webhook Push)
+## Milestone 4: Google Sheets Export (TSV Copy & CSV Share)
 
 **Objective:** Connect completed games to the user's Google Sheet so manual Apple Notes transcription is completely eliminated.
 
 ### Tasks
-1. **23-Column Sheet Row Preview (`src/components/SheetRowPreview.tsx`):**
-   - Horizontal preview card showing the exact 23 columns (`Date` through `FLD PCT`) for the current or selected game.
-2. **1-Tap "Copy Row for Google Sheets" (`src/services/sheetsSyncService.ts`):**
+1. **Summary & Data Sync Card (`app/summary.tsx`, `src/components/LiveScoreStrip.tsx`, `src/components/SheetRowPreview.tsx`):**
+   - Dedicated post-game / mid-game review screen showing the summarized Box Score tile (`LiveScoreStrip`) and a clean **DATA SYNC** card with sync status indicator (`UNSYNCED` / green `✓ COPIED`), **`← Back`** button, and swipe-back support.
+2. **Primary 1-Tap "Copy 23-Column Row" (`src/services/sheetsSyncService.ts`):**
    - Uses `expo-clipboard` to copy the tab-separated (`\t`) row to the clipboard.
    - Shows a confirmation toast (`"Copied 23-column row! Paste into Column A in Google Sheets"`).
-   - Optionally marks the game as `Completed & Synced`.
+   - Marks the game as `Completed & Synced`.
 3. **CSV Export (`src/services/sheetsSyncService.ts`):**
-   - Exports selected or all unsynced games as a `.csv` file (downloads in browser on Web; opens iOS Share Sheet via `expo-file-system` / `expo-sharing` on iPhone).
-4. **1-Tap Google Apps Script Webhook Integration:**
-   - Provide `scripts/GoogleAppsScript.gs` containing a lightweight `doPost(e)` script that appends a game row to the active Google Sheet while preserving formula columns (`AVG`, `OBP`, `SLG`, `OPS`, `FLD PCT`).
-   - Add a **Push to Google Sheets** button in the app that sends the JSON payload to the user's configured Apps Script URL and marks `synced_to_sheets = 1`.
+   - Secondary button that exports selected or all unsynced games as a `.csv` file (downloads in browser on Web; opens iOS Share Sheet via `expo-file-system` / `expo-sharing` on iPhone).
 
 ### Definition of Done / Verification
-- [ ] Copy a game row from the app and paste it into the user's Google Sheet; verify all 23 columns align with `Date, Position, AB, H, AVG, 1B, 2B, 3B, HR, E (Batting), BB, OBP, SLG, OPS, RBI, FC, K, FO, GO, PO, Assists, Errors, FLD PCT`.
-- [ ] Verify formula mode leaves `AVG`, `OBP`, `SLG`, `OPS`, and `FLD PCT` formulas intact when desired.
+- [x] Copy a game row from the app and paste it into the user's Google Sheet; verify all 23 columns align with `Date, Position, AB, H, AVG, 1B, 2B, 3B, HR, E (Batting), BB, OBP, SLG, OPS, RBI, FC, K, FO, GO, PO, Assists, Errors, FLD PCT`.
+- [x] Verify formula mode leaves `AVG`, `OBP`, `SLG`, `OPS`, and `FLD PCT` formulas intact when desired.
 
 ---
 

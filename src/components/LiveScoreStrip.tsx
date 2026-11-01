@@ -29,7 +29,7 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
         </View>
 
         <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>ON-BASE / SLG</Text>
+          <Text style={styles.metricLabel}>OPS</Text>
           <Text style={styles.metricMainValue}>
             {formatRateStat(stats.ops, { omitLeadingZero: true, nullRateOutput: '---' })}
           </Text>
@@ -98,37 +98,37 @@ const styles = StyleSheet.create({
     borderColor: '#1e293b',
   },
   metricLabel: {
-    fontSize: 10,
-    fontWeight: '700',
+    fontSize: 11,
+    fontWeight: '800',
     color: '#94a3b8',
     letterSpacing: 0.6,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   metricMainValue: {
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 22,
+    fontWeight: '900',
     color: '#f8fafc',
   },
   metricSubValue: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: '#cbd5e1',
-    marginTop: 2,
+    marginTop: 4,
     textAlign: 'center',
   },
   stripLines: {
     borderTopWidth: 1,
     borderTopColor: '#334155',
-    paddingTop: 8,
-    gap: 4,
+    paddingTop: 10,
+    gap: 6,
   },
   stripText: {
-    fontSize: 13,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: '#e2e8f0',
   },
   stripTag: {
     color: '#94a3b8',
-    fontWeight: '800',
+    fontWeight: '900',
   },
 });

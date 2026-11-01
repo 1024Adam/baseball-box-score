@@ -8,14 +8,10 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useRouter } from 'expo-router';
 import { BattingPad } from '../src/components/BattingPad';
 import { EventTimeline } from '../src/components/EventTimeline';
 import { FieldingPad } from '../src/components/FieldingPad';
-import { LiveScoreStrip } from '../src/components/LiveScoreStrip';
-import {
-  formatLiveBattingLine,
-  formatLiveFieldingLine,
-} from '../src/domain/liveGameHelpers';
 import { calculateGameStats } from '../src/domain/statCalculator';
 import {
   BattingOutcome,
@@ -54,6 +50,7 @@ function shiftDateString(dateStr: string, deltaDays: number): string {
 }
 
 export default function LiveGameDugoutScreen() {
+  const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,6 +60,7 @@ export default function LiveGameDugoutScreen() {
     setLoading(true);
     try {
       const prefs = await defaultPreferencesStore.getPreferences();
+
       const today = getTodayDateString();
       const activeGame = await defaultGameRepository.getOrCreateActiveGame(
         today,
@@ -163,6 +161,15 @@ export default function LiveGameDugoutScreen() {
     });
     setGame(newGame);
     setEvents([]);
+  };
+
+  const handleGoToSummary = () => {
+    if (!game) return;
+    void triggerMediumHaptic();
+    router.push({
+      pathname: '/summary',
+      params: { gameId: game.id },
+    });
   };
 
   if (loading || !game) {
@@ -287,8 +294,18 @@ export default function LiveGameDugoutScreen() {
           onDeleteEvent={handleDeleteEvent}
         />
 
-        {/* Box Score Summary Tile (positioned at the bottom above Submit/Export) */}
-        <LiveScoreStrip stats={stats} />
+        {/* Submit / Review Stats Button */}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Submit and Review Game Stats"
+          onPress={handleGoToSummary}
+          style={({ pressed }) => [
+            styles.submitButton,
+            pressed && styles.pressed,
+          ]}
+        >
+          <Text style={styles.submitButtonText}>SUMMARY →</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -443,6 +460,23 @@ const styles = StyleSheet.create({
   },
   posChipTextSelected: {
     color: '#f8fafc',
+  },
+  submitButton: {
+    backgroundColor: '#1d4ed8',
+    borderColor: '#3b82f6',
+    borderWidth: 1.5,
+    borderRadius: 12,
+    minHeight: 54,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    marginBottom: 24,
+  },
+  submitButtonText: {
+    fontSize: 15,
+    fontWeight: '900',
+    color: '#ffffff',
+    letterSpacing: 0.6,
   },
   pressed: {
     opacity: 0.75,

@@ -9,7 +9,7 @@ export interface UserPreferences {
 
 export const DEFAULT_USER_PREFERENCES: UserPreferences = {
   lastUsedPosition: 'SS',
-  sheetFormulaMode: 'computed_values',
+  sheetFormulaMode: 'blank_for_arrayformula',
   appsScriptWebhookUrl: '',
 };
 

@@ -28,7 +28,7 @@ const ON_BASE_BUTTONS: OutcomeButtonDef[] = [
   {
     outcome: 'E_BAT',
     label: 'E',
-    subtitle: 'Reached on Err',
+    subtitle: 'Error',
     countKey: 'eBatting',
   },
   {
@@ -99,12 +99,6 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
           );
         })}
       </View>
-
-      {selectedRbi !== null && (
-        <Text style={styles.rbiHint}>
-          Next plate appearance will log +{selectedRbi} RBI (resets after tap)
-        </Text>
-      )}
 
       {/* Hits Group */}
       <Text style={styles.groupLabel}>HITS (+AB, +H)</Text>
@@ -241,12 +235,6 @@ const styles = StyleSheet.create({
   },
   rbiPillTextActive: {
     color: '#f8fafc',
-  },
-  rbiHint: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#cbd5e1',
-    marginBottom: 6,
   },
   groupLabel: {
     fontSize: 11,
