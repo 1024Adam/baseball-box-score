@@ -41,9 +41,9 @@ export const PLAYER_POSITIONS: readonly PlayerPosition[] = [
   'SS',
   'LF',
   'LCF',
+  'CF',
   'RCF',
   'RF',
-  'CF',
   'RV',
   'UTL',
 ] as const;
@@ -57,9 +57,9 @@ export const POSITION_OPTIONS: readonly PositionOption[] = [
   { code: 'SS', label: 'Shortstop' },
   { code: 'LF', label: 'Left Field' },
   { code: 'LCF', label: 'Left-Center Field' },
+  { code: 'CF', label: 'Center Field' },
   { code: 'RCF', label: 'Right-Center Field' },
   { code: 'RF', label: 'Right Field' },
-  { code: 'CF', label: 'Center Field' },
   { code: 'RV', label: 'Rover' },
   { code: 'UTL', label: 'Utility' },
 ] as const;

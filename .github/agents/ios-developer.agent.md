@@ -22,9 +22,9 @@ Your mission in this workspace is to build, test, and refine the **Baseball Box 
 1. **Align with Architecture & Roadmap**: Always check `ARCHITECTURE.md` and `ROADMAP.md` (and use the `implement-milestone` skill when executing milestones).
 2. **Build Domain & Storage First**: Implement and unit-test pure TypeScript domain logic and repository methods before wiring UI screens.
 3. **Optimize for Live In-Game Dugout UX**:
-   - Launch straight into today's active game with default settings (`Date = Today`, `Position = last used position`).
-   - Provide large, color-coded tap targets for **Hits** (`1B`, `2B`, `3B`, `HR`), **On Base** (`BB`, `E (Bat)`, `FC`), **Outs** (`FO`, `GO`, `K`), **RBIs** (`0–4`), and **Fielding** (`PO`, `Assists`, `Errors`).
-   - Persist every event immediately and support 1-tap **Undo Last Play** plus individual event deletion.
+   - Launch straight into today's active game with default settings (`Date = Today`, `Position = last used position`, supporting `C`, `P`, `1B`, `2B`, `3B`, `SS`, `LF`, `LCF`, `CF`, `RCF`, `RF`, `RV`, `UTL`).
+   - Provide large, neutral-styled tap targets for **Hits** (`1B`, `2B`, `3B`, `HR`), **On Base** (`BB`, `E`, `FC`), **Outs** (`FO`, `GO`, `K`), **RBIs** (`0–4`), and **Fielding** (`PO`, `A`, `E`).
+   - Persist every event immediately, provide a prominent amber/yellow 1-tap **Undo Last Play** button, and place the **Box Score Summary Tile** (`LiveScoreStrip`) at the bottom right above game submission/export controls.
 4. **Verify in WSL Before Completing**:
    - Run automated tests (`npm test`) and TypeScript typechecking (`npx tsc --noEmit`) in WSL.
    - Update completed verification checkboxes (`- [x]`) in `ROADMAP.md` when finishing a milestone.

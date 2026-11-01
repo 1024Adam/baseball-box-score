@@ -78,26 +78,25 @@ At every milestone, verification follows a three-tier loop:
 ### Tasks
 1. **Instant-Launch Active Game Flow (`app/index.tsx`):**
    - On launch, automatically load today's active game (or create one with `gameDate = Today` and `position = lastUsedPosition`).
-   - Top bar displays a compact **Date Pill** and **Position Selector Pill** (`C`, `P`, `1B`, `2B`, `3B`, `SS`, `LF`, `LCF`, `RCF`, `RF`, `CF`, `RV`, `UTL`). Tapping a position either switches the game position or appends it (e.g. `SS / 2B`).
-2. **Live Box Score Header (`src/components/LiveScoreStrip.tsx`):**
-   - Always-visible summary bar showing live batting (`2-for-3 | 2B, HR | 2 RBI | 1 BB | .667 AVG | 1.417 OPS`) and live fielding (`2 PO | 3 A | 0 E | 1.000 FLD`).
-3. **Batting Action Pad (`src/components/BattingPad.tsx`):**
-   - High-contrast, oversized touch buttons grouped by outcome:
-     - **Hits:** `1B`, `2B`, `3B`, `HR`
-     - **On Base / Misc:** `BB`, `E (Bat)`, `FC`
-     - **Outs:** `FO (Fly/Line Out)`, `GO (Ground Out)`, `K`
-   - **Zero-Typing RBI Quick Bar:** Simple `0 | +1 | +2 | +3 | +4 RBI` pill selector or post-tap modifier so RBIs are logged in a single thumb tap (`HR` defaults to `1 RBI` automatically and can be tapped up to `2–4`).
-4. **Fielding Action Pad (`src/components/FieldingPad.tsx`):**
-   - Three large single-tap buttons: **`+ Putout (PO)`**, **`+ Assist`**, **`+ Error`** with immediate counter badges.
-5. **Chronological Play Log & 1-Tap Undo (`src/components/EventTimeline.tsx`):**
-   - Prominent **Undo Last Play** button in the thumb zone.
-   - Scrollable play-by-play list for the current game (`PA #1: 1B`, `Fielding #2: PO`, `Fielding #3: Assist`, `PA #4: HR (2 RBI)`) with tap-to-delete on any individual item.
+   - Top bar displays a compact **Date Pill** and **Position Selector Pill** (`C`, `P`, `1B`, `2B`, `3B`, `SS`, `LF`, `LCF`, `CF`, `RCF`, `RF`, `RV`, `UTL`). Tapping a position sets the game's single position (`UTL` is used if playing multiple positions) and immediately dismisses the selector.
+2. **Batting Action Pad (`src/components/BattingPad.tsx`):**
+   - High-contrast, neutral-styled oversized touch buttons grouped by outcome:
+     - **Hits:** `1B` (Single), `2B` (Double), `3B` (Triple), `HR` (Home Run)
+     - **On Base / Misc:** `BB` (Walk), `E` (Reached on Err), `FC` (Fielder's Choice)
+     - **Outs:** `FO` (Fly / Line Out), `GO` (Ground Out), `K` (Strikeout)
+   - **Zero-Typing RBI Quick Bar:** Simple `0 | +1 | +2 | +3 | +4 RBI` pill selector so RBIs are logged in a single thumb tap (`HR` defaults to `1 RBI` automatically and can be tapped up to `2–4`).
+3. **Fielding Action Pad (`src/components/FieldingPad.tsx`):**
+   - Three large single-tap neutral buttons: **`PO`** (Putout), **`A`** (Assist), and **`E`** (Error (Field)) with immediate counter badges.
+4. **1-Tap Undo Last Play (`src/components/EventTimeline.tsx`):**
+   - Prominent amber/yellow **Undo Last Play** button in the thumb zone (no cluttering play-by-play list on the main screen).
    - Trigger `expo-haptics` light/medium impact on native iOS taps.
+5. **Live Box Score Summary Tile (`src/components/LiveScoreStrip.tsx`):**
+   - Positioned at the bottom of the screen (just above the game Submit / Export actions), showing live batting (`2-for-3 | 2B, HR | 2 RBI | 1 BB | .667 AVG | 1.417 OPS`) and live fielding (`2 PO | 3 A | 0 E | 1.000 FLD`).
 
 ### Definition of Done / Verification
-- [ ] Start `npx expo start --web` in WSL and record a full game (4 plate appearances + 5 fielding chances + 1 undo) in `<15 seconds` without touching the keyboard.
-- [ ] Refresh the browser tab mid-game and confirm all logged plays remain intact.
-- [ ] Open in **Expo Go** on iPhone and verify touch targets, readability, and haptic feedback.
+- [x] Start `npx expo start --web` in WSL and record a full game (4 plate appearances + 5 fielding chances + 1 undo) in `<15 seconds` without touching the keyboard.
+- [x] Refresh the browser tab mid-game and confirm all logged plays remain intact.
+- [x] Open in **Expo Go** on iPhone and verify touch targets, readability, and haptic feedback.
 
 ---
 
