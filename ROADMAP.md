@@ -107,7 +107,7 @@ At every milestone, verification follows a three-tier loop:
 ### Tasks
 1. **Summary & Data Sync Card (`app/summary.tsx`, `src/components/LiveScoreStrip.tsx`, `src/components/SheetRowPreview.tsx`):**
    - Dedicated post-game / mid-game review screen showing the summarized Box Score tile (`LiveScoreStrip`) and a clean **DATA SYNC** card with sync status indicator (`UNSYNCED` / green `✓ COPIED`), **`← Back`** button, and swipe-back support.
-2. **Primary 1-Tap "Copy 23-Column Row" (`src/services/sheetsSyncService.ts`):**
+2. **Primary 1-Tap "COPY DATA ROW" (`src/services/sheetsSyncService.ts`):**
    - Uses `expo-clipboard` to copy the tab-separated (`\t`) row to the clipboard.
    - Shows a confirmation toast (`"Copied 23-column row! Paste into Column A in Google Sheets"`).
    - Marks the game as `Completed & Synced`.

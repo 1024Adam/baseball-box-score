@@ -130,7 +130,7 @@ export default function GameSummaryScreen() {
       }
     );
     setGame(updatedGame);
-    showFloatingToast('✓ Copied 23-column row');
+    showFloatingToast('✓ Copied data row');
   };
 
   const handleExportCsv = async () => {

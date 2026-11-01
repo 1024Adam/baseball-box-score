@@ -48,7 +48,7 @@ export function SheetRowPreview({
       <View style={styles.actionsColumn}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Copy 23-Column Row for Google Sheets"
+          accessibilityLabel="COPY DATA ROW for Google Sheets"
           onPress={onCopyRow}
           style={({ pressed }) => [
             styles.primaryActionButton,
@@ -56,10 +56,10 @@ export function SheetRowPreview({
           ]}
         >
           <Text style={styles.primaryActionTitle}>
-            COPY 23-COLUMN ROW (TSV)
+            COPY DATA ROW (TSV)
           </Text>
           <Text style={styles.primaryActionSub}>
-            Copies tab-separated row to paste into Column A in Google Sheets
+            Copies tab-separated row to clipboard
           </Text>
         </Pressable>
 
