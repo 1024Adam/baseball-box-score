@@ -66,8 +66,8 @@ At every milestone, verification follows a three-tier loop:
    - Persist `lastUsedPosition` (default `'SS'`), `sheetFormulaMode`, and `appsScriptWebhookUrl`.
 
 ### Definition of Done / Verification
-- [ ] Integration tests in `tests/gameRepository.test.ts` verify creating a game, appending 6 events, undoing the last event, deleting a middle event, and recomputing the exact `SheetGameRow`.
-- [ ] Reloading the web app or restarting the native app restores the active game state with zero data loss.
+- [x] Integration tests in `tests/gameRepository.test.ts` verify creating a game, appending 6 events, undoing the last event, deleting a middle event, and recomputing the exact `SheetGameRow`.
+- [x] Reloading the web app or restarting the native app restores the active game state with zero data loss.
 
 ---
 
@@ -78,7 +78,7 @@ At every milestone, verification follows a three-tier loop:
 ### Tasks
 1. **Instant-Launch Active Game Flow (`app/index.tsx`):**
    - On launch, automatically load today's active game (or create one with `gameDate = Today` and `position = lastUsedPosition`).
-   - Top bar displays a compact **Date Pill** and **Position Selector Pill** (`C`, `1B`, `2B`, `3B`, `SS`, `LF`, `CF`, `RF`, `P`, `DH`, `UTIL`). Tapping a position either switches the game position or appends it (e.g. `SS / 2B`).
+   - Top bar displays a compact **Date Pill** and **Position Selector Pill** (`C`, `P`, `1B`, `2B`, `3B`, `SS`, `LF`, `LCF`, `RCF`, `RF`, `CF`, `RV`, `UTL`). Tapping a position either switches the game position or appends it (e.g. `SS / 2B`).
 2. **Live Box Score Header (`src/components/LiveScoreStrip.tsx`):**
    - Always-visible summary bar showing live batting (`2-for-3 | 2B, HR | 2 RBI | 1 BB | .667 AVG | 1.417 OPS`) and live fielding (`2 PO | 3 A | 0 E | 1.000 FLD`).
 3. **Batting Action Pad (`src/components/BattingPad.tsx`):**

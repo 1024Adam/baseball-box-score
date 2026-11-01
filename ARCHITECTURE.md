@@ -84,7 +84,7 @@ Users never manually increment `AB` or `H`. Tapping a single plate appearance ou
 CREATE TABLE IF NOT EXISTS games (
     id TEXT PRIMARY KEY NOT NULL,                  -- UUID v4
     game_date TEXT NOT NULL,                       -- YYYY-MM-DD (defaults to today)
-    position TEXT NOT NULL DEFAULT 'UTIL',         -- e.g. 'SS', 'CF', 'SS / 2B'
+    position TEXT NOT NULL DEFAULT 'UTL',          -- e.g. 'SS', 'CF', 'SS / 2B'
     opponent TEXT NOT NULL DEFAULT '',             -- Optional opponent name
     notes TEXT NOT NULL DEFAULT '',                -- Optional game notes
     status TEXT NOT NULL DEFAULT 'active',         -- 'active' | 'completed'

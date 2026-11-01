@@ -12,6 +12,58 @@ export type BattingOutcome =
 
 export type FieldingOutcome = 'PO' | 'ASSIST' | 'E_FLD';
 
+export type PlayerPosition =
+  | 'C'
+  | 'P'
+  | '1B'
+  | '2B'
+  | '3B'
+  | 'SS'
+  | 'LF'
+  | 'LCF'
+  | 'RCF'
+  | 'RF'
+  | 'CF'
+  | 'RV'
+  | 'UTL';
+
+export interface PositionOption {
+  code: PlayerPosition;
+  label: string;
+}
+
+export const PLAYER_POSITIONS: readonly PlayerPosition[] = [
+  'C',
+  'P',
+  '1B',
+  '2B',
+  '3B',
+  'SS',
+  'LF',
+  'LCF',
+  'RCF',
+  'RF',
+  'CF',
+  'RV',
+  'UTL',
+] as const;
+
+export const POSITION_OPTIONS: readonly PositionOption[] = [
+  { code: 'C', label: 'Catcher' },
+  { code: 'P', label: 'Pitcher' },
+  { code: '1B', label: 'First Base' },
+  { code: '2B', label: 'Second Base' },
+  { code: '3B', label: 'Third Base' },
+  { code: 'SS', label: 'Shortstop' },
+  { code: 'LF', label: 'Left Field' },
+  { code: 'LCF', label: 'Left-Center Field' },
+  { code: 'RCF', label: 'Right-Center Field' },
+  { code: 'RF', label: 'Right Field' },
+  { code: 'CF', label: 'Center Field' },
+  { code: 'RV', label: 'Rover' },
+  { code: 'UTL', label: 'Utility' },
+] as const;
+
 export type EventCategory = 'batting' | 'fielding';
 
 export type GameStatus = 'active' | 'completed';
