@@ -1,6 +1,6 @@
 ---
 name: implement-milestone
-description: "Implement a milestone from ROADMAP.md following the specifications in ARCHITECTURE.md. Use when: implementing a milestone, building the next milestone, executing the roadmap, starting Milestone 1-5, continuing development of the baseball stats app."
+description: "Implement a milestone from ROADMAP.md following the specifications in ARCHITECTURE.md. Use when: implementing a milestone, building the next milestone, executing the roadmap, starting Milestone 1-6, continuing development of the baseball stats app."
 argument-hint: "Optional milestone number (e.g., '1', 'Milestone 2', or omit for next incomplete milestone)"
 user-invocable: true
 disable-model-invocation: false

@@ -1,6 +1,6 @@
 # Baseball Box Score — Sequential Development Roadmap
 
-This roadmap breaks the development of the Baseball Box Score iOS app into **5 sequential vertical milestones**. Each milestone produces a working, verifiable increment that can be tested inside **WSL Ubuntu** on Windows before deploying to a physical iPhone via **Expo Go**.
+This roadmap breaks the development of the Baseball Box Score iOS app into **6 sequential vertical milestones**. Each milestone produces a working, verifiable increment that can be tested inside **WSL Ubuntu** on Windows before deploying to a physical iPhone via **Expo Go**.
 
 ---
 
@@ -131,17 +131,49 @@ At every milestone, verification follows a three-tier loop:
    - **"Start New Game"** action (supports doubleheaders on the same date!).
 2. **Season & Career Stats Dashboard (`app/career.tsx`):**
    - Aggregates all completed/active games locally using `calculateAggregateStats`.
-   - Displays headline cards for `AVG`, `OBP`, `SLG`, `OPS`, and `FLD PCT` alongside counting totals (`Games`, `AB`, `H`, `1B`, `2B`, `3B`, `HR`, `RBI`, `BB`, `K`, `FO`, `GO`, `PO`, `A`, `E`).
-   - Filterable by **Position** (e.g., view stats when playing `SS` vs. `CF`) or **Year/Season**.
+   - Displays headline cards for `AVG`, `OBP`, `SLG`, `OPS`, and `FLD PCT` alongside counting totals (`Games`, `PA`, `AB`, `H`, `1B`, `2B`, `3B`, `HR`, `RBI`, `BB`, `E (Bat)`, `FC`, `K`, `FO`, `GO`, `PO`, `Assists`, `Errors`).
+   - Filterable by **Year/Season**.
 3. **Settings & Backup Screen (`app/settings.tsx`):**
    - Default starting position selector.
-   - Google Sheets formula handling toggle (`Include calculated rates` vs. `Leave rate columns blank for Sheet formulas`).
-   - Google Apps Script Webhook URL input + **"Test Connection"** button.
-   - Full JSON/CSV backup export.
+   - Full CSV backup export.
 4. **Standalone Build Readiness (`app.json` & `eas.json`):**
    - Configure app icons, splash screen, dark/high-contrast theme, and `eas.json` profile for optional standalone iOS builds.
 
 ### Definition of Done / Verification
 - [x] Confirm doubleheader support (two separate games on the same date can be logged and exported independently).
-- [x] Confirm Season/Career dashboard accurately aggregates stats across multiple games and filters by position.
+- [x] Confirm Season/Career dashboard accurately aggregates stats across multiple games and filters by season.
 - [x] All unit and integration tests pass in WSL (`npm test`) and full app flow is verified on iPhone via Expo Go.
+
+---
+
+## Milestone 6: Codebase Cleanup & Game Lifecycle Hardening
+
+**Objective:** Eliminate all dead/unwired code identified during the post-Milestone 5 architecture audit, deduplicate date utilities, and fix active-game / `+ New Game` lifecycle edge cases so completed games never spawn phantom `0-for-0` entries.
+
+### Tasks
+1. **Fix Active Game & `+ New Game` Lifecycle Bugs (`src/storage/gameRepository.ts`, `app/index.tsx`, `app/history.tsx`):**
+   - **Prevent Phantom "Game 2" After Syncing:** Update `getOrCreateActiveGame(todayDate, defaultPosition)` in `src/storage/gameRepository.ts` so that if an `active` game exists for `todayDate` it is returned, and if no `active` game exists for `todayDate` but a `completed` game already exists for `todayDate`, the most recent game for `todayDate` is returned instead of automatically creating a new empty game on tab switches or app relaunches. A second game on the same date (doubleheader) must only be created when the user explicitly taps **`+ New Game`**.
+   - **Prevent Duplicate Empty Games on `+ New Game`:** Add a repository method `startNewGame(todayDate: string, defaultPosition: string): Promise<Game>` (or equivalent logic) used by both `app/index.tsx` and `app/history.tsx`:
+     - If any existing active game has `0` recorded events, reuse/reset that empty game (updating its `gameDate` and `position`) rather than creating orphan `0-for-0` games.
+     - Mark any existing active games that have `> 0` recorded events as `status: 'completed'` before creating the new active game.
+2. **Consolidate Local Date Utilities (`src/domain/liveGameHelpers.ts`, `app/index.tsx`, `app/summary.tsx`, `app/history.tsx`, `app/settings.tsx`, `src/services/sheetsSyncService.ts`):**
+   - Export `getTodayDateString()` and `shiftDateString(dateStr: string, deltaDays: number)` from `src/domain/liveGameHelpers.ts`.
+   - Remove the 3 duplicate local definitions in `app/index.tsx`, `app/summary.tsx`, and `app/history.tsx`.
+   - Replace `new Date().toISOString().slice(0, 10)` (UTC date) in `app/settings.tsx` and `src/services/sheetsSyncService.ts` with `getTodayDateString()` so evening games always use the local date.
+3. **Remove Unwired Webhook & Formula-Mode Dead Code (`scripts/GoogleAppsScript.gs`, `src/domain/types.ts`, `src/domain/sheetFormatter.ts`, `src/services/sheetsSyncService.ts`, `src/storage/preferencesStore.ts`, `tests/`):**
+   - Delete `scripts/GoogleAppsScript.gs`.
+   - Remove `toWebhookPayload`, `WebhookRowPayload`, and `'webhook_preserve_formulas'` from `src/domain/sheetFormatter.ts` and `src/domain/types.ts`.
+   - Remove `pushGameToWebhook`, `testWebhookConnection`, and `WebhookPushResult` from `src/services/sheetsSyncService.ts`.
+   - Simplify `PreferencesStore` (`src/storage/preferencesStore.ts`) to persist `lastUsedPosition` only, removing the unused `sheetFormulaMode` and `appsScriptWebhookUrl` preferences and setters.
+   - Update `tests/sheetFormatter.test.ts`, `tests/sheetsSyncService.test.ts`, and `tests/gameRepository.test.ts` accordingly.
+4. **Remove Unused Props, Helpers, Storage Methods & Dependencies:**
+   - **Unused Event Deletion Plumbing:** Remove `onDeleteEvent` from `EventTimelineProps` (`src/components/EventTimeline.tsx`), `handleDeleteEvent` from `app/index.tsx`, `deleteEvent` from `GameRepository` (`src/storage/gameRepository.ts`), and `getEventById` / `replaceEventsForGame` from `StorageDriver` (`src/storage/database.ts`).
+   - **Unused Component Prop & Redundant Ternary:** Remove the unused `stats` prop from `SheetRowPreviewProps` (`src/components/SheetRowPreview.tsx` and `app/summary.tsx`), and simplify the redundant `btn.outcome === 'HR'` subtitle ternary in `src/components/BattingPad.tsx`.
+   - **Unused Domain Exports & Position Filter Code:** Remove unused `PositionOption`, `POSITION_OPTIONS`, `BATTING_OUTCOMES`, and `FIELDING_OUTCOMES` from `src/domain/types.ts`. In `src/domain/liveGameHelpers.ts`, remove `applyPositionSelection`, `parsePositions`, and the unused `position` filter property in `CareerFilterOptions` / `filterSheetGameRows` (retaining `year` filtering only).
+   - **Unused Package Dependency:** Remove `"query-string"` from `package.json`.
+
+### Definition of Done / Verification
+- [ ] Completing/copying today's game and switching tabs (or reloading the app) reopens today's completed game without spawning a phantom `0-for-0` game in History.
+- [ ] Tapping `+ New Game` when the current active game has `0` events reuses that game instead of creating duplicate empty games.
+- [ ] Zero dead exports, unused props, or unwired webhook files remain in the codebase.
+- [ ] `npm test` and `npm run typecheck` pass with 0 errors in WSL.

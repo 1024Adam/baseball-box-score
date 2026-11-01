@@ -7,7 +7,7 @@ This application replaces a manual workflow of logging live in-game personal bas
 ### Core Architectural Constraints
 1. **Local-First & Offline-Resilient**: Dugouts frequently have weak or no cellular connectivity. All game creation, event logging, undo/redo, and stat calculation happen 100% locally on the device with immediate persistence (`<2ms` write latency) and zero required backend or user authentication.
 2. **Zero-Friction Live Game UX**: Launching the app drops directly into an active game session with sensible defaults (`Date = Today`, `Position = last used position`) and zero required text fields before logging the first plate appearance or fielding play.
-3. **Sync With Google Sheets (Not Replace It)**: The app acts as a fast, reliable capture tool and pocket stat reference that outputs rows matching the existing 23-column Google Sheet schema (via 1-tap TSV clipboard copy, CSV export, and a lightweight Google Apps Script webhook push).
+3. **Sync With Google Sheets (Not Replace It)**: The app acts as a fast, reliable capture tool and pocket stat reference that outputs rows matching the existing 23-column Google Sheet schema (via 1-tap TSV clipboard copy and CSV export).
 4. **WSL Ubuntu + Windows -> iPhone Development Workflow**: Built with **React Native (Expo) + TypeScript** so the entire application can be developed and tested inside WSL Ubuntu on a Windows laptop (via unit tests and mobile-viewport browser preview) and tested natively on a physical iPhone via **Expo Go** over Wi-Fi/tunnel without requiring macOS or Xcode.
 
 ---
@@ -20,7 +20,7 @@ This application replaces a manual workflow of logging live in-game personal bas
 | **Local Database** | **SQLite (`expo-sqlite`) + Repository Abstraction** (with Web storage fallback) | Relational SQL database stored on-device. Enables instant transactional event logging, crash recovery, and multi-season/by-position historical queries. | *AsyncStorage* (key-value store only; awkward for relational event logs and multi-game aggregation); *Hosted Cloud DB* (unnecessary complexity and network dependency). |
 | **State & Data Pattern** | **Append-Only Event Log + Derived Summary** | Each plate appearance or fielding play is persisted immediately as an immutable `GameEvent`. Box score totals and rate stats are pure derived functions of the event stream, making **Undo** and mid-game edits trivial. | *Mutable Counter Columns* (error-prone when correcting mistakes or tracking RBIs per plate appearance). |
 | **Testing** | **Vitest / Jest** | Runs pure TypeScript unit and integration tests for baseball math, repository persistence, and Google Sheets row formatting in `<1s` inside WSL. | Manual-only testing. |
-| **Google Sheets Integration** | **Phase 1:** 1-Tap TSV Row Copy (`expo-clipboard`) + CSV Share<br>**Phase 2:** Google Apps Script HTTPS Webhook | **Phase 1:** Tab-separated (`\t`) clipboard rows paste cleanly across all 23 columns in Google Sheets.<br>**Phase 2:** A lightweight Apps Script Web App attached to the target Google Sheet accepts a single `POST` request with zero OAuth2 token refresh overhead. | *Full Google Cloud OAuth2 + Sheets REST API* (high setup overhead with Google Cloud Console and OAuth token lifecycle for a single-user personal app). |
+| **Google Sheets Integration** | **1-Tap TSV Row Copy (`expo-clipboard`) + CSV Share** | Tab-separated (`\t`) clipboard rows paste cleanly across all 23 columns in Google Sheets while leaving formula columns blank so `ARRAYFORMULA` columns calculate automatically. | *Full Google Cloud OAuth2 + Sheets REST API* or *Apps Script Webhook* (unnecessary setup overhead for a single-user personal app). |
 
 ---
 
@@ -197,7 +197,7 @@ flowchart TD
 
     subgraph Domain["Pure TypeScript Domain Layer"]
         StatCalc["statCalculator.ts\n(Events -> SheetGameRow + Rate Stats)"]
-        SheetFormatter["sheetFormatter.ts\n(TSV / CSV / Webhook Payload)"]
+        SheetFormatter["sheetFormatter.ts\n(TSV / CSV Row Serializer)"]
     end
 
     subgraph Storage["Local Persistence Layer"]
@@ -207,7 +207,7 @@ flowchart TD
 
     subgraph External["Google Sheets Integration"]
         Clipboard["iOS / Browser Clipboard (TSV)"]
-        Webhook["Google Apps Script Webhook\n(1-Tap HTTPS POST)"]
+        CsvShare["CSV Export / iOS Share Sheet"]
     end
 
     LiveScreen -->|"Record Event / Undo"| Repo
@@ -217,7 +217,7 @@ flowchart TD
     StatCalc -->|"Season Totals"| HistoryScreen
     StatCalc -->|"SheetGameRow"| SheetFormatter
     SheetFormatter -->|"1-Tap Copy"| Clipboard
-    SheetFormatter -->|"1-Tap Push"| Webhook
+    SheetFormatter -->|"CSV Export"| CsvShare
 ```
 
 ### Recommended Directory Structure
@@ -227,39 +227,43 @@ baseball-box-score/
 ├── app/                          # Expo Router screens
 │   ├── _layout.tsx               # Bottom tab navigation (Live Game, History, Career, Settings)
 │   ├── index.tsx                 # Live Game Dugout Screen (default launch screen)
+│   ├── summary.tsx               # Game Box Score Summary & Data Sync screen
 │   ├── history.tsx               # Past Games list & sync status
 │   ├── career.tsx                # Cumulative season/career stats dashboard
-│   └── settings.tsx              # Default position, formula mode, Apps Script Webhook URL
+│   └── settings.tsx              # Default position & full CSV backup
 ├── src/
 │   ├── domain/                   # Pure TypeScript business logic (0 UI/DB dependencies)
 │   │   ├── types.ts              # Domain & Google Sheet row types
 │   │   ├── statCalculator.ts     # Event stream -> 23-column SheetGameRow & rate math
-│   │   └── sheetFormatter.ts     # TSV, CSV, and webhook payload serializers
+│   │   ├── sheetFormatter.ts     # TSV and CSV serializers
+│   │   └── liveGameHelpers.ts    # Box score summary formatting, date & season filter helpers
 │   ├── storage/                  # Local-first persistence
 │   │   ├── database.ts           # Platform-aware SQLite / Web storage initialization
-│   │   └── gameRepository.ts     # CRUD + event append/undo operations
+│   │   ├── gameRepository.ts     # CRUD + event append/undo operations
+│   │   └── preferencesStore.ts   # Default starting position preference store
 │   ├── services/
-│   │   └── sheetsSyncService.ts  # Clipboard copy, CSV share, and Apps Script POST client
+│   │   ├── sheetsSyncService.ts  # Clipboard copy and CSV file export/share
+│   │   └── hapticsService.ts     # Native iOS haptic feedback wrapper
 │   └── components/               # Reusable high-contrast dugout UI components
+│       ├── BottomNavBar.tsx
 │       ├── LiveScoreStrip.tsx
 │       ├── BattingPad.tsx
 │       ├── FieldingPad.tsx
 │       ├── EventTimeline.tsx
 │       └── SheetRowPreview.tsx
-├── scripts/
-│   └── GoogleAppsScript.gs       # Ready-to-paste Google Sheet webhook receiver script
 └── tests/                        # Unit & integration tests (run directly in WSL)
     ├── statCalculator.test.ts
     ├── sheetFormatter.test.ts
-    └── gameRepository.test.ts
+    ├── liveGameHelpers.test.ts
+    ├── gameRepository.test.ts
+    └── sheetsSyncService.test.ts
 ```
 
 ---
 
 ## 6. Google Sheets Formula Preservation Strategy
 
-Because the user's Google Sheet contains calculated rate columns (`AVG`, `OBP`, `SLG`, `OPS`, `FLD PCT`) interleaved between raw input columns (`D` and `F`, `K` and `O`, `V` and `W`), `sheetFormatter.ts` supports three configurable output modes for those 5 columns:
+Because the user's Google Sheet contains calculated rate columns (`AVG`, `OBP`, `SLG`, `OPS`, `FLD PCT`) interleaved between raw input columns (`D` and `F`, `K` and `O`, `V` and `W`), `sheetFormatter.ts` supports two configurable output modes for those 5 columns:
 
-1. **`blank_for_arrayformula`:** Outputs an empty value `""` in columns `E`, `L`, `M`, `N`, and `W` so sheet-level `ARRAYFORMULA` columns calculate automatically without being blocked by static text.
-2. **`computed_values` (Default for Preview / CSV):** Outputs formatted rate strings (e.g., `.333`, `.400`, `.667`, `1.067`, `1.000`).
-3. **`webhook_preserve_formulas` (For Apps Script Push):** The Apps Script writes only the raw input columns and copies the adjacent row's formulas for `AVG`, `OBP`, `SLG`, `OPS`, and `FLD PCT`.
+1. **`blank_for_arrayformula` (Default for TSV Copy & CSV Backup):** Outputs an empty value `""` in columns `E`, `L`, `M`, `N`, and `W` so sheet-level `ARRAYFORMULA` columns calculate automatically without being blocked by static text.
+2. **`computed_values`:** Outputs formatted rate strings (e.g., `0.333`, `0.400`, `0.667`, `1.067`, `1.000`).
