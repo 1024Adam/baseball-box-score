@@ -72,7 +72,7 @@ export class GameRepository {
    */
   async getOrCreateActiveGame(
     todayDate: string,
-    defaultPosition = 'SS'
+    defaultPosition = 'RCF'
   ): Promise<Game> {
     const store = await this.driver();
     const games = await store.getAllGames();
@@ -105,7 +105,7 @@ export class GameRepository {
     const game: Game = {
       id: generateUuid(),
       gameDate: input.gameDate,
-      position: input.position?.trim() || 'SS',
+      position: input.position?.trim() || 'RCF',
       opponent: input.opponent?.trim() ?? '',
       notes: input.notes?.trim() ?? '',
       status: 'active',

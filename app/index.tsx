@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BattingPad } from '../src/components/BattingPad';
 import { EventTimeline } from '../src/components/EventTimeline';
 import { FieldingPad } from '../src/components/FieldingPad';
@@ -51,6 +51,7 @@ function shiftDateString(dateStr: string, deltaDays: number): string {
 
 export default function LiveGameDugoutScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams<{ gameId?: string }>();
   const [game, setGame] = useState<Game | null>(null);
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,20 +62,26 @@ export default function LiveGameDugoutScreen() {
     try {
       const prefs = await defaultPreferencesStore.getPreferences();
 
-      const today = getTodayDateString();
-      const activeGame = await defaultGameRepository.getOrCreateActiveGame(
-        today,
-        prefs.lastUsedPosition
-      );
+      let targetGame: Game | null = null;
+      if (params.gameId && typeof params.gameId === 'string') {
+        targetGame = await defaultGameRepository.getGameById(params.gameId);
+      }
+      if (!targetGame) {
+        const today = getTodayDateString();
+        targetGame = await defaultGameRepository.getOrCreateActiveGame(
+          today,
+          prefs.lastUsedPosition
+        );
+      }
       const gameEvents = await defaultGameRepository.getEventsForGame(
-        activeGame.id
+        targetGame.id
       );
-      setGame(activeGame);
+      setGame(targetGame);
       setEvents(gameEvents);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [params.gameId]);
 
   useEffect(() => {
     void loadActiveGame();
@@ -189,7 +196,23 @@ export default function LiveGameDugoutScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Top Bar: Date Pill, Position Pill, & + New Game */}
+        {/* Title Row: Live Game + New Game Button */}
+        <View style={styles.titleRow}>
+          <Text style={styles.screenTitle}>Live Game</Text>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Start new game"
+            onPress={handleStartNewGame}
+            style={({ pressed }) => [
+              styles.newGamePill,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={styles.newGameText}>+ New Game</Text>
+          </Pressable>
+        </View>
+
+        {/* Context Row: Date Pill & Position Pill */}
         <View style={styles.topBar}>
           <View style={styles.datePillGroup}>
             <Pressable
@@ -236,18 +259,6 @@ export default function LiveGameDugoutScreen() {
           >
             <Text style={styles.pillLabel}>Position</Text>
             <Text style={styles.positionPillValue}>{game.position} ▾</Text>
-          </Pressable>
-
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Start new game"
-            onPress={handleStartNewGame}
-            style={({ pressed }) => [
-              styles.newGamePill,
-              pressed && styles.pressed,
-            ]}
-          >
-            <Text style={styles.newGameText}>+ New Game</Text>
           </Pressable>
         </View>
 
@@ -323,9 +334,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 28,
+    paddingHorizontal: 14,
+    paddingTop: 10,
+    paddingBottom: 12,
     maxWidth: 600,
     width: '100%',
     alignSelf: 'center',
@@ -342,23 +353,36 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  screenTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
   topBar: {
     flexDirection: 'row',
     alignItems: 'stretch',
     justifyContent: 'space-between',
     gap: 8,
-    marginBottom: 14,
+    marginBottom: 10,
   },
   datePillGroup: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     minHeight: 46,
     backgroundColor: '#1C1C1E',
     borderRadius: 12,
     overflow: 'hidden',
   },
   dateStepButton: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 14,
     alignSelf: 'stretch',
     justifyContent: 'center',
     alignItems: 'center',
@@ -370,7 +394,7 @@ const styles = StyleSheet.create({
   },
   datePillCenter: {
     paddingHorizontal: 6,
-    paddingVertical: 6,
+    paddingVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -380,7 +404,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
   },
   pillValue: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '600',
     color: '#FFFFFF',
   },
@@ -389,7 +413,7 @@ const styles = StyleSheet.create({
     minHeight: 46,
     backgroundColor: '#1C1C1E',
     borderRadius: 12,
-    paddingVertical: 6,
+    paddingVertical: 5,
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -403,7 +427,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   newGamePill: {
-    minHeight: 46,
+    minHeight: 42,
     backgroundColor: '#1C1C1E',
     borderRadius: 12,
     paddingHorizontal: 12,
@@ -418,14 +442,14 @@ const styles = StyleSheet.create({
   positionDrawer: {
     backgroundColor: '#1C1C1E',
     borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
+    padding: 12,
+    marginBottom: 10,
   },
   positionDrawerTitle: {
     fontSize: 12,
     fontWeight: '600',
     color: '#8E8E93',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   positionGrid: {
     flexDirection: 'row',
@@ -433,19 +457,19 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   posChip: {
-    minWidth: 54,
-    height: 40,
+    width: '23%',
+    minHeight: 44,
     borderRadius: 10,
     backgroundColor: '#2C2C2E',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
   },
   posChipSelected: {
     backgroundColor: '#0A84FF',
   },
   posChipText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
     color: '#FFFFFF',
   },
@@ -455,12 +479,12 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#0A84FF',
-    borderRadius: 12,
-    minHeight: 52,
+    borderRadius: 14,
+    minHeight: 50,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    marginBottom: 24,
+    marginBottom: 6,
   },
   submitButtonText: {
     fontSize: 17,

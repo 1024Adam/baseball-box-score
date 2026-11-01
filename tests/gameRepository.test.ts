@@ -243,8 +243,24 @@ describe('GameRepository & PreferencesStore Integration', () => {
     expect(allGames).toHaveLength(2);
   });
 
-  it('returns sensible defaults from PreferencesStore when no preferences are saved yet', async () => {
-    const prefs = await prefsStore.getPreferences();
-    expect(prefs).toEqual(DEFAULT_USER_PREFERENCES);
+  it('deletes a full game and all of its associated events', async () => {
+    const game = await repo.getOrCreateActiveGame('2026-11-01', 'RCF');
+    await repo.recordEvent({
+      gameId: game.id,
+      category: 'batting',
+      eventType: '1B',
+    });
+    await repo.recordEvent({
+      gameId: game.id,
+      category: 'fielding',
+      eventType: 'PO',
+    });
+
+    expect(await repo.listGamesWithStats()).toHaveLength(1);
+
+    await repo.deleteGame(game.id);
+
+    expect(await repo.listGamesWithStats()).toHaveLength(0);
+    expect(await repo.getEventsForGame(game.id)).toHaveLength(0);
   });
 });

@@ -46,12 +46,12 @@ export function EventTimeline({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 12,
+    marginBottom: 10,
   },
   undoButton: {
     backgroundColor: '#1C1C1E',
-    borderRadius: 12,
-    minHeight: 50,
+    borderRadius: 14,
+    minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 14,

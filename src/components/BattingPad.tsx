@@ -194,9 +194,9 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1C1C1E',
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 17,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 3,
     gap: 4,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   rbiPill: {
     flex: 1,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
   },
   rbiPillActive: {
     backgroundColor: '#636366',
@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: '#8E8E93',
-    marginTop: 8,
-    marginBottom: 6,
+    marginTop: 6,
+    marginBottom: 5,
   },
   gridRow: {
     flexDirection: 'row',
@@ -247,9 +247,9 @@ const styles = StyleSheet.create({
   },
   padButton: {
     flex: 1,
-    minHeight: 68,
+    minHeight: 62,
     borderRadius: 12,
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 6,
     alignItems: 'center',
     justifyContent: 'center',
@@ -274,8 +274,8 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    top: 6,
-    right: 6,
+    top: 5,
+    right: 5,
     backgroundColor: '#0A84FF',
     borderRadius: 10,
     minWidth: 20,

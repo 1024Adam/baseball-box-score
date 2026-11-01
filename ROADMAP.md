@@ -142,6 +142,6 @@ At every milestone, verification follows a three-tier loop:
    - Configure app icons, splash screen, dark/high-contrast theme, and `eas.json` profile for optional standalone iOS builds.
 
 ### Definition of Done / Verification
-- [ ] Confirm doubleheader support (two separate games on the same date can be logged and exported independently).
-- [ ] Confirm Season/Career dashboard accurately aggregates stats across multiple games and filters by position.
-- [ ] All unit and integration tests pass in WSL (`npm test`) and full app flow is verified on iPhone via Expo Go.
+- [x] Confirm doubleheader support (two separate games on the same date can be logged and exported independently).
+- [x] Confirm Season/Career dashboard accurately aggregates stats across multiple games and filters by position.
+- [x] All unit and integration tests pass in WSL (`npm test`) and full app flow is verified on iPhone via Expo Go.

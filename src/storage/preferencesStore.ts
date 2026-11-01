@@ -8,7 +8,7 @@ export interface UserPreferences {
 }
 
 export const DEFAULT_USER_PREFERENCES: UserPreferences = {
-  lastUsedPosition: 'SS',
+  lastUsedPosition: 'RCF',
   sheetFormulaMode: 'blank_for_arrayformula',
   appsScriptWebhookUrl: '',
 };

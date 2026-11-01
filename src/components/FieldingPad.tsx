@@ -73,15 +73,15 @@ export function FieldingPad({ stats, onRecordFielding }: FieldingPadProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1C1C1E',
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 17,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   row: {
     flexDirection: 'row',
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
   },
   fieldButton: {
     flex: 1,
-    minHeight: 68,
+    minHeight: 62,
     borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#2C2C2E',
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: 'absolute',
-    top: 6,
-    right: 6,
+    top: 5,
+    right: 5,
     backgroundColor: '#0A84FF',
     borderRadius: 10,
     minWidth: 20,

@@ -95,3 +95,48 @@ export function applyPositionSelection(
 
   return [...currentList, target].join(' / ');
 }
+
+export interface CareerFilterOptions {
+  position?: string; // 'ALL' or a specific position like 'SS', 'CF'
+  year?: string;     // 'ALL' or a 4-digit year like '2026'
+}
+
+/**
+ * Extracts distinct 4-digit years from a list of `SheetGameRow` records (sorted newest first).
+ */
+export function extractAvailableYears(rows: readonly SheetGameRow[]): string[] {
+  const years = new Set<string>();
+  for (const row of rows) {
+    const yearPrefix = row.date?.slice(0, 4);
+    if (yearPrefix && /^\d{4}$/.test(yearPrefix)) {
+      years.add(yearPrefix);
+    }
+  }
+  return Array.from(years).sort((a, b) => b.localeCompare(a));
+}
+
+/**
+ * Filters an array of `SheetGameRow` records by position and/or 4-digit year.
+ */
+export function filterSheetGameRows(
+  rows: readonly SheetGameRow[],
+  filter: CareerFilterOptions
+): SheetGameRow[] {
+  const targetPosition = filter.position?.trim();
+  const targetYear = filter.year?.trim();
+
+  return rows.filter((row) => {
+    if (targetPosition && targetPosition !== 'ALL') {
+      const rowPositions = parsePositions(row.position);
+      if (!rowPositions.includes(targetPosition)) {
+        return false;
+      }
+    }
+    if (targetYear && targetYear !== 'ALL') {
+      if (!row.date.startsWith(targetYear)) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
