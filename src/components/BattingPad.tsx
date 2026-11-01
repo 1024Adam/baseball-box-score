@@ -67,10 +67,10 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>BATTING PLAY</Text>
+      <Text style={styles.sectionTitle}>Batting</Text>
 
       {/* Full-Width Zero-Typing RBI Quick Bar */}
-      <Text style={styles.groupLabel}>RBI ON PLAY</Text>
+      <Text style={styles.groupLabel}>RBI on Play</Text>
       <View style={styles.rbiBar}>
         {RBI_OPTIONS.map((rbiVal) => {
           const isActive =
@@ -101,7 +101,7 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
       </View>
 
       {/* Hits Group */}
-      <Text style={styles.groupLabel}>HITS (+AB, +H)</Text>
+      <Text style={styles.groupLabel}>Hits</Text>
       <View style={styles.gridRow}>
         {HIT_BUTTONS.map((btn) => {
           const count = Number(stats[btn.countKey] ?? 0);
@@ -133,7 +133,7 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
       </View>
 
       {/* On Base / Misc Group */}
-      <Text style={styles.groupLabel}>ON BASE / MISC</Text>
+      <Text style={styles.groupLabel}>On Base</Text>
       <View style={styles.gridRow}>
         {ON_BASE_BUTTONS.map((btn) => {
           const count = Number(stats[btn.countKey] ?? 0);
@@ -161,7 +161,7 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
       </View>
 
       {/* Outs Group */}
-      <Text style={styles.groupLabel}>OUTS (+AB)</Text>
+      <Text style={styles.groupLabel}>Outs</Text>
       <View style={styles.gridRow}>
         {OUT_BUTTONS.map((btn) => {
           const count = Number(stats[btn.countKey] ?? 0);
@@ -193,55 +193,51 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 14,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
-    marginBottom: 12,
+    padding: 14,
+    marginBottom: 14,
   },
   sectionTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#f8fafc',
-    letterSpacing: 0.8,
-    marginBottom: 4,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginBottom: 6,
   },
   rbiBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    marginBottom: 4,
+    backgroundColor: '#2C2C2E',
+    borderRadius: 10,
+    padding: 3,
+    gap: 4,
+    marginBottom: 6,
   },
   rbiPill: {
     flex: 1,
-    minHeight: 46,
-    borderRadius: 10,
-    backgroundColor: '#0f172a',
-    borderWidth: 1,
-    borderColor: '#475569',
+    minHeight: 38,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 8,
   },
   rbiPillActive: {
-    backgroundColor: '#475569',
-    borderColor: '#94a3b8',
+    backgroundColor: '#636366',
   },
   rbiPillText: {
     fontSize: 15,
-    fontWeight: '800',
-    color: '#cbd5e1',
+    fontWeight: '600',
+    color: '#8E8E93',
   },
   rbiPillTextActive: {
-    color: '#f8fafc',
+    color: '#FFFFFF',
   },
   groupLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#94a3b8',
-    letterSpacing: 0.6,
-    marginTop: 6,
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#8E8E93',
+    marginTop: 8,
     marginBottom: 6,
   },
   gridRow: {
@@ -257,32 +253,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    backgroundColor: '#334155',
-    borderColor: '#475569',
+    backgroundColor: '#2C2C2E',
     position: 'relative',
   },
   buttonPressed: {
-    opacity: 0.75,
+    opacity: 0.7,
     transform: [{ scale: 0.98 }],
   },
   buttonMainText: {
     fontSize: 20,
-    fontWeight: '900',
-    color: '#ffffff',
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   buttonSubText: {
     fontSize: 11,
-    fontWeight: '600',
-    color: '#e2e8f0',
+    fontWeight: '500',
+    color: '#8E8E93',
     marginTop: 2,
     textAlign: 'center',
   },
   badge: {
     position: 'absolute',
-    top: 5,
-    right: 5,
-    backgroundColor: '#f8fafc',
+    top: 6,
+    right: 6,
+    backgroundColor: '#0A84FF',
     borderRadius: 10,
     minWidth: 20,
     height: 20,
@@ -292,7 +286,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 11,
-    fontWeight: '900',
-    color: '#0f172a',
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
 });

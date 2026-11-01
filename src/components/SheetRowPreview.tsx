@@ -24,7 +24,7 @@ export function SheetRowPreview({
       {/* Section Header + Sync Badge */}
       <View style={styles.headerRow}>
         <View style={styles.headerTextBlock}>
-          <Text style={styles.sectionTitle}>DATA SYNC</Text>
+          <Text style={styles.sectionTitle}>Data Sync</Text>
         </View>
 
         <View
@@ -39,7 +39,7 @@ export function SheetRowPreview({
               syncedToSheets && styles.syncBadgeTextSynced,
             ]}
           >
-            {syncedToSheets ? '✓ COPIED' : 'UNSYNCED'}
+            {syncedToSheets ? '✓ Copied' : 'Unsynced'}
           </Text>
         </View>
       </View>
@@ -55,9 +55,7 @@ export function SheetRowPreview({
             pressed && styles.pressed,
           ]}
         >
-          <Text style={styles.primaryActionTitle}>
-            COPY DATA ROW (TSV)
-          </Text>
+          <Text style={styles.primaryActionTitle}>Copy Data Row (TSV)</Text>
           <Text style={styles.primaryActionSub}>
             Copies tab-separated row to clipboard
           </Text>
@@ -72,7 +70,7 @@ export function SheetRowPreview({
             pressed && styles.pressed,
           ]}
         >
-          <Text style={styles.secondaryButtonTitle}>EXPORT CSV</Text>
+          <Text style={styles.secondaryButtonTitle}>Export CSV</Text>
           <Text style={styles.secondaryButtonSub}>Download / Share .csv if needed</Text>
         </Pressable>
       </View>
@@ -82,11 +80,9 @@ export function SheetRowPreview({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 14,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
+    padding: 14,
     marginBottom: 24,
   },
   headerRow: {
@@ -101,65 +97,57 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: '#f8fafc',
-    letterSpacing: 0.8,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   syncBadge: {
     flexShrink: 0,
-    paddingVertical: 6,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1.5,
+    borderRadius: 999,
   },
   syncBadgeSynced: {
-    backgroundColor: '#064e3b',
-    borderColor: '#10b981',
+    backgroundColor: '#30D158',
   },
   syncBadgeUnsynced: {
-    backgroundColor: '#0f172a',
-    borderColor: '#334155',
+    backgroundColor: '#2C2C2E',
   },
   syncBadgeText: {
     fontSize: 12,
-    fontWeight: '800',
-    color: '#cbd5e1',
+    fontWeight: '600',
+    color: '#8E8E93',
   },
   syncBadgeTextSynced: {
-    color: '#ffffff',
+    color: '#000000',
+    fontWeight: '700',
   },
   actionsColumn: {
     gap: 10,
   },
   primaryActionButton: {
-    backgroundColor: '#334155',
-    borderColor: '#475569',
-    borderWidth: 1,
+    backgroundColor: '#0A84FF',
     borderRadius: 12,
-    minHeight: 60,
+    minHeight: 56,
     paddingVertical: 12,
     paddingHorizontal: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
   primaryActionTitle: {
-    fontSize: 16,
-    fontWeight: '900',
-    color: '#f8fafc',
-    letterSpacing: 0.4,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   primaryActionSub: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#cbd5e1',
-    marginTop: 3,
+    fontWeight: '500',
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginTop: 2,
     textAlign: 'center',
   },
   secondaryButton: {
-    backgroundColor: '#1e293b',
-    borderColor: '#475569',
-    borderWidth: 1,
+    backgroundColor: '#2C2C2E',
     borderRadius: 12,
     minHeight: 50,
     paddingVertical: 10,
@@ -168,17 +156,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   secondaryButtonTitle: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#cbd5e1',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#0A84FF',
   },
   secondaryButtonSub: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#94a3b8',
+    fontWeight: '500',
+    color: '#8E8E93',
     marginTop: 2,
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.7,
   },
 });

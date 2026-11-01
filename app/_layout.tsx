@@ -11,7 +11,7 @@ export default function RootLayout() {
           headerShown: false,
           gestureEnabled: true,
           animation: 'slide_from_right',
-          contentStyle: { backgroundColor: '#0f172a' },
+          contentStyle: { backgroundColor: '#000000' },
         }}
       />
     </>

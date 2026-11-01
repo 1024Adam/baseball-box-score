@@ -175,8 +175,8 @@ export default function LiveGameDugoutScreen() {
   if (loading || !game) {
     return (
       <SafeAreaView style={styles.loadingScreen}>
-        <ActivityIndicator size="large" color="#38bdf8" />
-        <Text style={styles.loadingText}>Loading Live Game...</Text>
+        <ActivityIndicator size="large" color="#0A84FF" />
+        <Text style={styles.loadingText}>Loading Game...</Text>
       </SafeAreaView>
     );
   }
@@ -189,15 +189,17 @@ export default function LiveGameDugoutScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Top Bar: Date Pill, Position Pill, & + New Game (Doubleheader) */}
+        {/* Top Bar: Date Pill, Position Pill, & + New Game */}
         <View style={styles.topBar}>
-          {/* Date Pill with quick -1d / Today / +1d controls */}
           <View style={styles.datePillGroup}>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Previous day"
               onPress={() => handleChangeDate(-1)}
-              style={styles.dateStepButton}
+              style={({ pressed }) => [
+                styles.dateStepButton,
+                pressed && styles.pressed,
+              ]}
             >
               <Text style={styles.dateStepText}>‹</Text>
             </Pressable>
@@ -207,20 +209,22 @@ export default function LiveGameDugoutScreen() {
               onPress={() => handleChangeDate(0)}
               style={styles.datePillCenter}
             >
-              <Text style={styles.pillLabel}>DATE</Text>
+              <Text style={styles.pillLabel}>Date</Text>
               <Text style={styles.pillValue}>{game.gameDate}</Text>
             </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Next day"
               onPress={() => handleChangeDate(1)}
-              style={styles.dateStepButton}
+              style={({ pressed }) => [
+                styles.dateStepButton,
+                pressed && styles.pressed,
+              ]}
             >
               <Text style={styles.dateStepText}>›</Text>
             </Pressable>
           </View>
 
-          {/* Position Selector Pill */}
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`Active position ${game.position}. Tap to change`}
@@ -230,11 +234,10 @@ export default function LiveGameDugoutScreen() {
               showPositionPicker && styles.positionPillActive,
             ]}
           >
-            <Text style={styles.pillLabel}>POS</Text>
+            <Text style={styles.pillLabel}>Position</Text>
             <Text style={styles.positionPillValue}>{game.position} ▾</Text>
           </Pressable>
 
-          {/* 1-Tap New Game (Doubleheader support) */}
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Start new game"
@@ -244,14 +247,14 @@ export default function LiveGameDugoutScreen() {
               pressed && styles.pressed,
             ]}
           >
-            <Text style={styles.newGameText}>+ NEW GAME</Text>
+            <Text style={styles.newGameText}>+ New Game</Text>
           </Pressable>
         </View>
 
         {/* Expandable 13-Position Selector Panel */}
         {showPositionPicker && (
           <View style={styles.positionDrawer}>
-            <Text style={styles.positionDrawerTitle}>SELECT POSITION</Text>
+            <Text style={styles.positionDrawerTitle}>Select Position</Text>
             <View style={styles.positionGrid}>
               {PLAYER_POSITIONS.map((pos) => {
                 const isSelected = game.position === pos;
@@ -294,7 +297,7 @@ export default function LiveGameDugoutScreen() {
           onDeleteEvent={handleDeleteEvent}
         />
 
-        {/* Submit / Review Stats Button */}
+        {/* Summary Button */}
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Submit and Review Game Stats"
@@ -304,7 +307,7 @@ export default function LiveGameDugoutScreen() {
             pressed && styles.pressed,
           ]}
         >
-          <Text style={styles.submitButtonText}>SUMMARY →</Text>
+          <Text style={styles.submitButtonText}>Summary ›</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>
@@ -314,44 +317,44 @@ export default function LiveGameDugoutScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#000000',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 28,
     maxWidth: 600,
     width: '100%',
     alignSelf: 'center',
   },
   loadingScreen: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#000000',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
   },
   loadingText: {
-    color: '#f8fafc',
-    fontSize: 16,
-    fontWeight: '700',
+    color: '#8E8E93',
+    fontSize: 15,
+    fontWeight: '500',
   },
   topBar: {
     flexDirection: 'row',
     alignItems: 'stretch',
     justifyContent: 'space-between',
     gap: 8,
-    marginBottom: 12,
+    marginBottom: 14,
   },
   datePillGroup: {
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 46,
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
     overflow: 'hidden',
   },
   dateStepButton: {
@@ -361,9 +364,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dateStepText: {
-    color: '#94a3b8',
-    fontSize: 18,
-    fontWeight: '900',
+    color: '#0A84FF',
+    fontSize: 20,
+    fontWeight: '600',
   },
   datePillCenter: {
     paddingHorizontal: 6,
@@ -372,65 +375,56 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pillLabel: {
-    fontSize: 9,
-    fontWeight: '800',
-    color: '#94a3b8',
-    letterSpacing: 0.6,
+    fontSize: 10,
+    fontWeight: '500',
+    color: '#8E8E93',
   },
   pillValue: {
     fontSize: 13,
-    fontWeight: '800',
-    color: '#f8fafc',
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   positionPill: {
     flex: 1,
     minHeight: 46,
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#475569',
     paddingVertical: 6,
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   positionPillActive: {
-    backgroundColor: '#334155',
-    borderColor: '#94a3b8',
+    backgroundColor: '#2C2C2E',
   },
   positionPillValue: {
     fontSize: 14,
-    fontWeight: '900',
-    color: '#f8fafc',
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   newGamePill: {
     minHeight: 46,
-    backgroundColor: '#334155',
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#475569',
     paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   newGameText: {
-    fontSize: 11,
-    fontWeight: '900',
-    color: '#f8fafc',
-    letterSpacing: 0.4,
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#0A84FF',
   },
   positionDrawer: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 14,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#475569',
-    marginBottom: 12,
+    padding: 14,
+    marginBottom: 14,
   },
   positionDrawerTitle: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#cbd5e1',
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#8E8E93',
     marginBottom: 10,
   },
   positionGrid: {
@@ -442,44 +436,39 @@ const styles = StyleSheet.create({
     minWidth: 54,
     height: 40,
     borderRadius: 10,
-    backgroundColor: '#0f172a',
-    borderWidth: 1,
-    borderColor: '#334155',
+    backgroundColor: '#2C2C2E',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 10,
   },
   posChipSelected: {
-    backgroundColor: '#475569',
-    borderColor: '#94a3b8',
+    backgroundColor: '#0A84FF',
   },
   posChipText: {
     fontSize: 14,
-    fontWeight: '800',
-    color: '#cbd5e1',
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   posChipTextSelected: {
-    color: '#f8fafc',
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
   submitButton: {
-    backgroundColor: '#1d4ed8',
-    borderColor: '#3b82f6',
-    borderWidth: 1.5,
+    backgroundColor: '#0A84FF',
     borderRadius: 12,
-    minHeight: 54,
+    minHeight: 52,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
     marginBottom: 24,
   },
   submitButtonText: {
-    fontSize: 15,
-    fontWeight: '900',
-    color: '#ffffff',
-    letterSpacing: 0.6,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.7,
   },
 });
 

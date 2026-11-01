@@ -17,9 +17,10 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.sectionTitle}>Box Score</Text>
       <View style={styles.metricRow}>
         <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>BATTING</Text>
+          <Text style={styles.metricLabel}>Batting</Text>
           <Text style={styles.metricMainValue}>
             {stats.h}-{stats.ab}
           </Text>
@@ -48,7 +49,7 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
         </View>
 
         <View style={styles.metricCard}>
-          <Text style={styles.metricLabel}>FIELDING</Text>
+          <Text style={styles.metricLabel}>Fielding</Text>
           <Text style={styles.metricMainValue}>
             {formatRateStat(stats.fldPct, { omitLeadingZero: true, nullRateOutput: '---' })}
           </Text>
@@ -60,11 +61,11 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
 
       <View style={styles.stripLines}>
         <Text style={styles.stripText} numberOfLines={1}>
-          <Text style={styles.stripTag}>BAT </Text>
+          <Text style={styles.stripTag}>Batting  </Text>
           {battingLine}
         </Text>
         <Text style={styles.stripText} numberOfLines={1}>
-          <Text style={styles.stripTag}>FLD </Text>
+          <Text style={styles.stripTag}>Fielding </Text>
           {fieldingLine}
         </Text>
       </View>
@@ -74,61 +75,62 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 14,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
-    marginBottom: 12,
+    padding: 14,
+    marginBottom: 14,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginBottom: 10,
   },
   metricRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 8,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   metricCard: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#2C2C2E',
     borderRadius: 10,
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 8,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#1e293b',
   },
   metricLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#94a3b8',
-    letterSpacing: 0.6,
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#8E8E93',
     marginBottom: 4,
   },
   metricMainValue: {
     fontSize: 22,
-    fontWeight: '900',
-    color: '#f8fafc',
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   metricSubValue: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#cbd5e1',
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#8E8E93',
     marginTop: 4,
     textAlign: 'center',
   },
   stripLines: {
-    borderTopWidth: 1,
-    borderTopColor: '#334155',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#38383A',
     paddingTop: 10,
     gap: 6,
   },
   stripText: {
     fontSize: 15,
-    fontWeight: '700',
-    color: '#e2e8f0',
+    fontWeight: '500',
+    color: '#FFFFFF',
   },
   stripTag: {
-    color: '#94a3b8',
-    fontWeight: '900',
+    color: '#8E8E93',
+    fontWeight: '600',
   },
 });

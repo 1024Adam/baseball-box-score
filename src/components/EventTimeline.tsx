@@ -34,10 +34,10 @@ export function EventTimeline({
           ]}
         >
           {lastEvent
-            ? `↶ UNDO LAST PLAY (${lastEvent.eventType}${
+            ? `↶ Undo Last Play (${lastEvent.eventType}${
                 lastEvent.rbi > 0 ? ` +${lastEvent.rbi} RBI` : ''
               })`
-            : '↶ UNDO LAST PLAY'}
+            : '↶ Undo Last Play'}
         </Text>
       </Pressable>
     </View>
@@ -49,9 +49,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   undoButton: {
-    backgroundColor: '#b45309',
-    borderColor: '#f59e0b',
-    borderWidth: 1.5,
+    backgroundColor: '#1C1C1E',
     borderRadius: 12,
     minHeight: 50,
     alignItems: 'center',
@@ -59,20 +57,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   undoButtonDisabled: {
-    backgroundColor: '#1e293b',
-    borderColor: '#334155',
-    opacity: 0.5,
+    backgroundColor: '#1C1C1E',
+    opacity: 0.45,
   },
   undoButtonTitle: {
-    fontSize: 14,
-    fontWeight: '900',
-    color: '#ffffff',
-    letterSpacing: 0.5,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   undoButtonTitleDisabled: {
-    color: '#94a3b8',
+    color: '#8E8E93',
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.7,
   },
 });

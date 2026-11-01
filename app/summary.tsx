@@ -153,7 +153,7 @@ export default function GameSummaryScreen() {
   if (loading || !game) {
     return (
       <SafeAreaView style={styles.loadingScreen}>
-        <ActivityIndicator size="large" color="#94a3b8" />
+        <ActivityIndicator size="large" color="#0A84FF" />
         <Text style={styles.loadingText}>Loading Summary...</Text>
       </SafeAreaView>
     );
@@ -189,7 +189,7 @@ export default function GameSummaryScreen() {
               pressed && styles.pressed,
             ]}
           >
-            <Text style={styles.backArrow}>←</Text>
+            <Text style={styles.backArrow}>‹</Text>
             <Text style={styles.backText}>Back</Text>
           </Pressable>
 
@@ -203,7 +203,7 @@ export default function GameSummaryScreen() {
         {/* Summarized Box Score View */}
         <LiveScoreStrip stats={stats} />
 
-        {/* 23-Column Google Sheets Preview & Copy / Export Buttons */}
+        {/* Data Sync Card */}
         <SheetRowPreview
           stats={stats}
           syncedToSheets={game.syncedToSheets}
@@ -218,7 +218,7 @@ export default function GameSummaryScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#000000',
     position: 'relative',
   },
   floatingToastContainer: {
@@ -230,89 +230,84 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   floatingToastPill: {
-    backgroundColor: '#064e3b',
-    borderColor: '#10b981',
-    borderWidth: 1.5,
+    backgroundColor: '#2C2C2E',
     borderRadius: 999,
     paddingVertical: 10,
     paddingHorizontal: 18,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
     elevation: 6,
   },
   floatingToastText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '800',
-    letterSpacing: 0.3,
+    color: '#30D158',
+    fontSize: 15,
+    fontWeight: '600',
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 28,
     maxWidth: 600,
     width: '100%',
     alignSelf: 'center',
   },
   loadingScreen: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#000000',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
   },
   loadingText: {
-    color: '#f8fafc',
-    fontSize: 16,
-    fontWeight: '700',
+    color: '#8E8E93',
+    fontSize: 15,
+    fontWeight: '500',
   },
   headerBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 14,
     gap: 12,
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 46,
-    paddingHorizontal: 14,
-    backgroundColor: '#1e293b',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#475569',
-    gap: 6,
+    minHeight: 40,
+    paddingRight: 12,
+    gap: 4,
   },
   backArrow: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#f8fafc',
+    fontSize: 28,
+    lineHeight: 28,
+    fontWeight: '500',
+    color: '#0A84FF',
+    marginTop: -2,
   },
   backText: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#f8fafc',
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#0A84FF',
   },
   gameContextBadge: {
-    minHeight: 46,
-    paddingHorizontal: 14,
-    backgroundColor: '#1e293b',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
+    minHeight: 36,
+    paddingHorizontal: 12,
+    backgroundColor: '#1C1C1E',
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   gameContextText: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#cbd5e1',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.7,
   },
 });

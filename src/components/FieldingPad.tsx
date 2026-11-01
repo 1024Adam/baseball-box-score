@@ -10,7 +10,7 @@ export interface FieldingPadProps {
 export function FieldingPad({ stats, onRecordFielding }: FieldingPadProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>FIELDING CHANCES</Text>
+      <Text style={styles.sectionTitle}>Fielding</Text>
       <View style={styles.row}>
         <Pressable
           accessibilityRole="button"
@@ -72,19 +72,16 @@ export function FieldingPad({ stats, onRecordFielding }: FieldingPadProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#1e293b',
+    backgroundColor: '#1C1C1E',
     borderRadius: 14,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#334155',
-    marginBottom: 12,
+    padding: 14,
+    marginBottom: 14,
   },
   sectionTitle: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#f8fafc',
-    letterSpacing: 0.8,
-    marginBottom: 8,
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginBottom: 10,
   },
   row: {
     flexDirection: 'row',
@@ -98,41 +95,39 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    backgroundColor: '#334155',
-    borderColor: '#475569',
+    backgroundColor: '#2C2C2E',
     position: 'relative',
   },
   pressed: {
-    opacity: 0.75,
+    opacity: 0.7,
     transform: [{ scale: 0.98 }],
   },
   mainLabel: {
-    fontSize: 16,
-    fontWeight: '900',
-    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
   subLabel: {
     fontSize: 11,
-    fontWeight: '700',
-    color: '#e2e8f0',
+    fontWeight: '500',
+    color: '#8E8E93',
     marginTop: 2,
   },
   badge: {
     position: 'absolute',
     top: 6,
     right: 6,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#0A84FF',
     borderRadius: 10,
-    minWidth: 22,
+    minWidth: 20,
     height: 20,
-    paddingHorizontal: 6,
+    paddingHorizontal: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badgeText: {
-    fontSize: 12,
-    fontWeight: '900',
-    color: '#0f172a',
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
 });
