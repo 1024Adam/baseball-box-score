@@ -89,28 +89,28 @@ describe('sheetFormatter', () => {
     // RBI = 2, FC = 0, K = 0, FO = 1, GO = 0, PO = 1, Assists = 1, Errors = 0, FLD PCT = 1.000
     expect(columns).toEqual([
       '2026-10-31', // 1: Date
-      'SS',         // 2: Position
-      '3',          // 3: AB
-      '2',          // 4: H
-      '0.667',      // 5: AVG
-      '1',          // 6: 1B
-      '0',          // 7: 2B
-      '0',          // 8: 3B
-      '1',          // 9: HR
-      '0',          // 10: E (Batting)
-      '1',          // 11: BB
-      '0.750',      // 12: OBP
-      '1.667',      // 13: SLG
-      '2.417',      // 14: OPS
-      '2',          // 15: RBI
-      '0',          // 16: FC
-      '0',          // 17: K
-      '1',          // 18: FO
-      '0',          // 19: GO
-      '1',          // 20: PO
-      '1',          // 21: Assists
-      '0',          // 22: Errors
-      '1.000',      // 23: FLD PCT
+      'SS', // 2: Position
+      '3', // 3: AB
+      '2', // 4: H
+      '0.667', // 5: AVG
+      '1', // 6: 1B
+      '0', // 7: 2B
+      '0', // 8: 3B
+      '1', // 9: HR
+      '0', // 10: E (Batting)
+      '1', // 11: BB
+      '0.750', // 12: OBP
+      '1.667', // 13: SLG
+      '2.417', // 14: OPS
+      '2', // 15: RBI
+      '0', // 16: FC
+      '0', // 17: K
+      '1', // 18: FO
+      '0', // 19: GO
+      '1', // 20: PO
+      '1', // 21: Assists
+      '0', // 22: Errors
+      '1.000', // 23: FLD PCT
     ]);
   });
 
@@ -120,7 +120,7 @@ describe('sheetFormatter', () => {
     });
 
     expect(cells).toHaveLength(23);
-    expect(cells[4]).toBe('');  // Col E (5): AVG
+    expect(cells[4]).toBe(''); // Col E (5): AVG
     expect(cells[11]).toBe(''); // Col L (12): OBP
     expect(cells[12]).toBe(''); // Col M (13): SLG
     expect(cells[13]).toBe(''); // Col N (14): OPS

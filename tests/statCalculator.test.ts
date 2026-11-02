@@ -99,7 +99,7 @@ describe('statCalculator', () => {
     expect(row.fldPct).toBeCloseTo(5 / 6, 5);
   });
 
-  it('counts E_BAT (Reached on Error) and FC (Fielder\'s Choice) as AB without incrementing H', () => {
+  it("counts E_BAT (Reached on Error) and FC (Fielder's Choice) as AB without incrementing H", () => {
     const events: GameEvent[] = [
       makeBattingEvent(1, 'E_BAT', 1),
       makeBattingEvent(2, 'FC', 1),

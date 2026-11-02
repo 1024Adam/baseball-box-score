@@ -1,14 +1,5 @@
 export type BattingOutcome =
-  | '1B'
-  | '2B'
-  | '3B'
-  | 'HR'
-  | 'E_BAT'
-  | 'BB'
-  | 'FC'
-  | 'K'
-  | 'FO'
-  | 'GO';
+  '1B' | '2B' | '3B' | 'HR' | 'E_BAT' | 'BB' | 'FC' | 'K' | 'FO' | 'GO';
 
 export type FieldingOutcome = 'PO' | 'ASSIST' | 'E_FLD';
 
@@ -47,14 +38,12 @@ export type EventCategory = 'batting' | 'fielding';
 
 export type GameStatus = 'active' | 'completed';
 
-export type SheetFormulaMode =
-  | 'computed_values'
-  | 'blank_for_arrayformula';
+export type SheetFormulaMode = 'computed_values' | 'blank_for_arrayformula';
 
 export interface Game {
   id: string;
-  gameDate: string;          // YYYY-MM-DD
-  position: string;          // e.g. 'SS', 'CF', 'SS / 2B'
+  gameDate: string; // YYYY-MM-DD
+  position: string; // e.g. 'SS', 'CF', 'SS / 2B'
   opponent: string;
   notes: string;
   status: GameStatus;
@@ -77,29 +66,29 @@ export interface GameEvent {
 }
 
 export interface SheetGameRow {
-  date: string;              // Col A (1): Date
-  position: string;          // Col B (2): Position
-  ab: number;                // Col C (3): AB
-  h: number;                 // Col D (4): H
-  avg: number | null;        // Col E (5): AVG (calculated)
-  singles: number;           // Col F (6): 1B
-  doubles: number;           // Col G (7): 2B
-  triples: number;           // Col H (8): 3B
-  hr: number;                // Col I (9): HR
-  eBatting: number;          // Col J (10): E (Batting)
-  bb: number;                // Col K (11): BB
-  obp: number | null;        // Col L (12): OBP (calculated)
-  slg: number | null;        // Col M (13): SLG (calculated)
-  ops: number | null;        // Col N (14): OPS (calculated)
-  rbi: number;               // Col O (15): RBI
-  fc: number;                // Col P (16): FC
-  k: number;                 // Col Q (17): K
-  fo: number;                // Col R (18): FO (Fly Outs / Line Outs)
-  go: number;                // Col S (19): GO (Ground Outs)
-  po: number;                // Col T (20): PO
-  assists: number;           // Col U (21): Assists
-  errors: number;            // Col V (22): Errors
-  fldPct: number | null;     // Col W (23): FLD PCT (calculated)
+  date: string; // Col A (1): Date
+  position: string; // Col B (2): Position
+  ab: number; // Col C (3): AB
+  h: number; // Col D (4): H
+  avg: number | null; // Col E (5): AVG (calculated)
+  singles: number; // Col F (6): 1B
+  doubles: number; // Col G (7): 2B
+  triples: number; // Col H (8): 3B
+  hr: number; // Col I (9): HR
+  eBatting: number; // Col J (10): E (Batting)
+  bb: number; // Col K (11): BB
+  obp: number | null; // Col L (12): OBP (calculated)
+  slg: number | null; // Col M (13): SLG (calculated)
+  ops: number | null; // Col N (14): OPS (calculated)
+  rbi: number; // Col O (15): RBI
+  fc: number; // Col P (16): FC
+  k: number; // Col Q (17): K
+  fo: number; // Col R (18): FO (Fly Outs / Line Outs)
+  go: number; // Col S (19): GO (Ground Outs)
+  po: number; // Col T (20): PO
+  assists: number; // Col U (21): Assists
+  errors: number; // Col V (22): Errors
+  fldPct: number | null; // Col W (23): FLD PCT (calculated)
 }
 
 export interface AggregateStats extends SheetGameRow {
@@ -135,7 +124,7 @@ export const SHEET_COLUMN_HEADERS: readonly [
   'PO',
   'Assists',
   'Errors',
-  'FLD PCT'
+  'FLD PCT',
 ] = [
   'Date',
   'Position',
@@ -161,4 +150,3 @@ export const SHEET_COLUMN_HEADERS: readonly [
   'Errors',
   'FLD PCT',
 ] as const;
-

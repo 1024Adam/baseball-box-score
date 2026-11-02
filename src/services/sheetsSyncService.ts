@@ -82,11 +82,8 @@ export async function exportGamesToCsv(
 ): Promise<CsvExportResult> {
   const csvContent = toCsvDocument(rows, options);
   const dateSuffix =
-    rows.length === 1 && rows[0].date
-      ? rows[0].date
-      : getTodayDateString();
-  const filename =
-    options.filename ?? `baseball-box-score-${dateSuffix}.csv`;
+    rows.length === 1 && rows[0].date ? rows[0].date : getTodayDateString();
+  const filename = options.filename ?? `baseball-box-score-${dateSuffix}.csv`;
 
   if (isWebBrowserEnvironment()) {
     try {

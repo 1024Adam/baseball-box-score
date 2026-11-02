@@ -113,50 +113,42 @@ describe('liveGameHelpers', () => {
     expect(formatLiveBattingLine(stats)).toBe(
       '2-for-3 | 2B, HR | 2 RBI | 1 BB | .667 AVG | 2.750 OPS'
     );
-    expect(formatLiveFieldingLine(stats)).toBe(
-      '2 PO | 1 A | 0 E | 1.000 FLD'
-    );
+    expect(formatLiveFieldingLine(stats)).toBe('2 PO | 1 A | 0 E | 1.000 FLD');
   });
 
   it('filters and aggregates career stats by season year', () => {
-    const g1 = calculateGameStats(
-      { gameDate: '2025-07-15', position: 'SS' },
-      [
-        {
-          id: '1',
-          gameId: 'g1',
-          sequenceNum: 1,
-          category: 'batting',
-          eventType: '1B',
-          rbi: 1,
-          createdAt: '2025-07-15T18:00:00Z',
-        },
-        {
-          id: '2',
-          gameId: 'g1',
-          sequenceNum: 2,
-          category: 'batting',
-          eventType: 'K',
-          rbi: 0,
-          createdAt: '2025-07-15T18:05:00Z',
-        },
-      ]
-    );
+    const g1 = calculateGameStats({ gameDate: '2025-07-15', position: 'SS' }, [
+      {
+        id: '1',
+        gameId: 'g1',
+        sequenceNum: 1,
+        category: 'batting',
+        eventType: '1B',
+        rbi: 1,
+        createdAt: '2025-07-15T18:00:00Z',
+      },
+      {
+        id: '2',
+        gameId: 'g1',
+        sequenceNum: 2,
+        category: 'batting',
+        eventType: 'K',
+        rbi: 0,
+        createdAt: '2025-07-15T18:05:00Z',
+      },
+    ]);
 
-    const g2 = calculateGameStats(
-      { gameDate: '2026-06-10', position: 'CF' },
-      [
-        {
-          id: '3',
-          gameId: 'g2',
-          sequenceNum: 1,
-          category: 'batting',
-          eventType: 'HR',
-          rbi: 2,
-          createdAt: '2026-06-10T18:00:00Z',
-        },
-      ]
-    );
+    const g2 = calculateGameStats({ gameDate: '2026-06-10', position: 'CF' }, [
+      {
+        id: '3',
+        gameId: 'g2',
+        sequenceNum: 1,
+        category: 'batting',
+        eventType: 'HR',
+        rbi: 2,
+        createdAt: '2026-06-10T18:00:00Z',
+      },
+    ]);
 
     const g3 = calculateGameStats(
       { gameDate: '2026-06-10', position: 'SS' }, // Doubleheader Game 2 on same date

@@ -202,7 +202,7 @@ At every milestone, verification follows a three-tier loop:
      3. **Build (`.github/workflows/build.yml`):** Runs `npm run build` (`npx expo export --platform web`) to verify the full production Metro bundle compiles with zero unresolved imports or asset errors.
 
 ### Definition of Done / Verification
-- [ ] `npm run typecheck`, `npm run lint`, and `npm run format:check` pass with 0 errors or warnings in WSL.
-- [ ] `npm test` passes 100% in WSL.
-- [ ] `npm run build` (`expo export --platform web`) succeeds cleanly in WSL.
-- [ ] `.github/workflows/code-quality.yml`, `.github/workflows/test.yml`, and `.github/workflows/build.yml` are valid and ready for GitHub Actions execution.
+- [x] `npm run typecheck`, `npm run lint`, and `npm run format:check` pass with 0 errors or warnings in WSL.
+- [x] `npm test` passes 100% in WSL.
+- [x] `npm run build` (`expo export --platform web`) succeeds cleanly in WSL.
+- [x] `.github/workflows/code-quality.yml`, `.github/workflows/test.yml`, and `.github/workflows/build.yml` are valid and ready for GitHub Actions execution.

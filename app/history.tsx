@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -93,7 +99,10 @@ function SwipeableHistoryCard({
           }
         },
         onPanResponderTerminate: () => {
-          animateTo(isOpenRef.current ? -DELETE_ACTION_WIDTH : 0, isOpenRef.current);
+          animateTo(
+            isOpenRef.current ? -DELETE_ACTION_WIDTH : 0,
+            isOpenRef.current
+          );
         },
       }),
     [animateTo, onDelete, translateX]
@@ -155,7 +164,7 @@ function SwipeableHistoryCard({
 
         <View style={styles.linesBlock}>
           <Text style={styles.statLineText} numberOfLines={1}>
-            <Text style={styles.statLineLabel}>Batting  </Text>
+            <Text style={styles.statLineLabel}>Batting </Text>
             {formatLiveBattingLine(stats)}
           </Text>
           <Text style={styles.statLineText} numberOfLines={1}>
@@ -174,9 +183,7 @@ function SwipeableHistoryCard({
               pressed && styles.pressed,
             ]}
           >
-            <Text style={styles.cardActionText}>
-              Edit Plays ({eventCount})
-            </Text>
+            <Text style={styles.cardActionText}>Edit Plays ({eventCount})</Text>
           </Pressable>
 
           <Pressable

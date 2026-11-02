@@ -48,7 +48,8 @@ export class PreferencesStore {
     if (patch.lastUsedPosition !== undefined) {
       await store.setPreference(
         PREF_KEYS.lastUsedPosition,
-        patch.lastUsedPosition.trim() || DEFAULT_USER_PREFERENCES.lastUsedPosition,
+        patch.lastUsedPosition.trim() ||
+          DEFAULT_USER_PREFERENCES.lastUsedPosition,
         now
       );
     }

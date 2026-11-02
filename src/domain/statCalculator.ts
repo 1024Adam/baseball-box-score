@@ -63,13 +63,7 @@ export function buildSheetRowFromCounts(
   options: StatCalculationOptions = {}
 ): SheetGameRow {
   const h = counts.singles + counts.doubles + counts.triples + counts.hr;
-  const ab =
-    h +
-    counts.eBatting +
-    counts.fc +
-    counts.k +
-    counts.fo +
-    counts.go;
+  const ab = h + counts.eBatting + counts.fc + counts.k + counts.fo + counts.go;
 
   const avg = ab > 0 ? h / ab : null;
 
@@ -80,10 +74,7 @@ export function buildSheetRowFromCounts(
   const obp = obpDenominator > 0 ? obpNumerator / obpDenominator : null;
 
   const totalBases =
-    counts.singles +
-    2 * counts.doubles +
-    3 * counts.triples +
-    4 * counts.hr;
+    counts.singles + 2 * counts.doubles + 3 * counts.triples + 4 * counts.hr;
   const slg = ab > 0 ? totalBases / ab : null;
 
   // OPS is defined whenever at least OBP or SLG is defined (or when both are defined;
@@ -94,8 +85,8 @@ export function buildSheetRowFromCounts(
     obp !== null && slg !== null
       ? obp + slg
       : obp !== null && ab === 0
-      ? obp
-      : null;
+        ? obp
+        : null;
 
   const totalChances = counts.po + counts.assists + counts.errors;
   const fldPct =
@@ -238,10 +229,7 @@ export function calculateAggregateStats(
   );
 
   const totalBases =
-    counts.singles +
-    2 * counts.doubles +
-    3 * counts.triples +
-    4 * counts.hr;
+    counts.singles + 2 * counts.doubles + 3 * counts.triples + 4 * counts.hr;
   const totalChances = counts.po + counts.assists + counts.errors;
 
   return {

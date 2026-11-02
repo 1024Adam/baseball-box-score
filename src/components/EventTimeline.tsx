@@ -7,10 +7,7 @@ export interface EventTimelineProps {
   onUndoLast: () => void;
 }
 
-export function EventTimeline({
-  events,
-  onUndoLast,
-}: EventTimelineProps) {
+export function EventTimeline({ events, onUndoLast }: EventTimelineProps) {
   const lastEvent = events.length > 0 ? events[events.length - 1] : null;
 
   return (

@@ -275,10 +275,7 @@ export default function LiveGameDugoutScreen() {
         <FieldingPad stats={stats} onRecordFielding={handleRecordFielding} />
 
         {/* 1-Tap Undo Last Play */}
-        <EventTimeline
-          events={events}
-          onUndoLast={handleUndoLast}
-        />
+        <EventTimeline events={events} onUndoLast={handleUndoLast} />
 
         {/* Summary Button */}
         <Pressable
@@ -467,4 +464,3 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
-

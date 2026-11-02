@@ -25,18 +25,33 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
             {stats.h}-{stats.ab}
           </Text>
           <Text style={styles.metricSubValue}>
-            AVG {formatRateStat(stats.avg, { omitLeadingZero: true, nullRateOutput: '---' })}
+            AVG{' '}
+            {formatRateStat(stats.avg, {
+              omitLeadingZero: true,
+              nullRateOutput: '---',
+            })}
           </Text>
         </View>
 
         <View style={styles.metricCard}>
           <Text style={styles.metricLabel}>OPS</Text>
           <Text style={styles.metricMainValue}>
-            {formatRateStat(stats.ops, { omitLeadingZero: true, nullRateOutput: '---' })}
+            {formatRateStat(stats.ops, {
+              omitLeadingZero: true,
+              nullRateOutput: '---',
+            })}
           </Text>
           <Text style={styles.metricSubValue}>
-            OBP {formatRateStat(stats.obp, { omitLeadingZero: true, nullRateOutput: '---' })} · SLG{' '}
-            {formatRateStat(stats.slg, { omitLeadingZero: true, nullRateOutput: '---' })}
+            OBP{' '}
+            {formatRateStat(stats.obp, {
+              omitLeadingZero: true,
+              nullRateOutput: '---',
+            })}{' '}
+            · SLG{' '}
+            {formatRateStat(stats.slg, {
+              omitLeadingZero: true,
+              nullRateOutput: '---',
+            })}
           </Text>
         </View>
 
@@ -51,7 +66,10 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
         <View style={styles.metricCard}>
           <Text style={styles.metricLabel}>Fielding</Text>
           <Text style={styles.metricMainValue}>
-            {formatRateStat(stats.fldPct, { omitLeadingZero: true, nullRateOutput: '---' })}
+            {formatRateStat(stats.fldPct, {
+              omitLeadingZero: true,
+              nullRateOutput: '---',
+            })}
           </Text>
           <Text style={styles.metricSubValue}>
             {stats.po} PO · {stats.assists} A · {stats.errors} E
@@ -61,7 +79,7 @@ export function LiveScoreStrip({ stats }: LiveScoreStripProps) {
 
       <View style={styles.stripLines}>
         <Text style={styles.stripText} numberOfLines={1}>
-          <Text style={styles.stripTag}>Batting  </Text>
+          <Text style={styles.stripTag}>Batting </Text>
           {battingLine}
         </Text>
         <Text style={styles.stripText} numberOfLines={1}>

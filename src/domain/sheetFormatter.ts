@@ -1,8 +1,4 @@
-import {
-  SHEET_COLUMN_HEADERS,
-  SheetFormulaMode,
-  SheetGameRow,
-} from './types';
+import { SHEET_COLUMN_HEADERS, SheetFormulaMode, SheetGameRow } from './types';
 
 export interface SheetFormatterOptions {
   /**
@@ -35,7 +31,10 @@ export interface SheetFormatterOptions {
  */
 export function formatRateStat(
   value: number | null,
-  options: Pick<SheetFormatterOptions, 'omitLeadingZero' | 'nullRateOutput'> = {}
+  options: Pick<
+    SheetFormatterOptions,
+    'omitLeadingZero' | 'nullRateOutput'
+  > = {}
 ): string {
   if (value === null || Number.isNaN(value)) {
     return options.nullRateOutput ?? '';
@@ -64,29 +63,29 @@ export function toOrderedCells(
     leaveRatesBlank ? '' : formatRateStat(val, options);
 
   return [
-    row.date,                     // Col A (1): Date
-    row.position,                 // Col B (2): Position
-    String(row.ab),               // Col C (3): AB
-    String(row.h),                // Col D (4): H
-    rateCell(row.avg),            // Col E (5): AVG
-    String(row.singles),          // Col F (6): 1B
-    String(row.doubles),          // Col G (7): 2B
-    String(row.triples),          // Col H (8): 3B
-    String(row.hr),               // Col I (9): HR
-    String(row.eBatting),         // Col J (10): E (Batting)
-    String(row.bb),               // Col K (11): BB
-    rateCell(row.obp),            // Col L (12): OBP
-    rateCell(row.slg),            // Col M (13): SLG
-    rateCell(row.ops),            // Col N (14): OPS
-    String(row.rbi),              // Col O (15): RBI
-    String(row.fc),               // Col P (16): FC
-    String(row.k),                // Col Q (17): K
-    String(row.fo),               // Col R (18): FO
-    String(row.go),               // Col S (19): GO
-    String(row.po),               // Col T (20): PO
-    String(row.assists),          // Col U (21): Assists
-    String(row.errors),           // Col V (22): Errors
-    rateCell(row.fldPct),         // Col W (23): FLD PCT
+    row.date, // Col A (1): Date
+    row.position, // Col B (2): Position
+    String(row.ab), // Col C (3): AB
+    String(row.h), // Col D (4): H
+    rateCell(row.avg), // Col E (5): AVG
+    String(row.singles), // Col F (6): 1B
+    String(row.doubles), // Col G (7): 2B
+    String(row.triples), // Col H (8): 3B
+    String(row.hr), // Col I (9): HR
+    String(row.eBatting), // Col J (10): E (Batting)
+    String(row.bb), // Col K (11): BB
+    rateCell(row.obp), // Col L (12): OBP
+    rateCell(row.slg), // Col M (13): SLG
+    rateCell(row.ops), // Col N (14): OPS
+    String(row.rbi), // Col O (15): RBI
+    String(row.fc), // Col P (16): FC
+    String(row.k), // Col Q (17): K
+    String(row.fo), // Col R (18): FO
+    String(row.go), // Col S (19): GO
+    String(row.po), // Col T (20): PO
+    String(row.assists), // Col U (21): Assists
+    String(row.errors), // Col V (22): Errors
+    rateCell(row.fldPct), // Col W (23): FLD PCT
   ];
 }
 
@@ -146,4 +145,3 @@ export function toCsvDocument(
 
   return lines.join('\n');
 }
-

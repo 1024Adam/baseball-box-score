@@ -9,10 +9,7 @@ import {
   View,
 } from 'react-native';
 import { getTodayDateString } from '../src/domain/liveGameHelpers';
-import {
-  PLAYER_POSITIONS,
-  PlayerPosition,
-} from '../src/domain/types';
+import { PLAYER_POSITIONS, PlayerPosition } from '../src/domain/types';
 import {
   triggerLightHaptic,
   triggerMediumHaptic,
@@ -86,10 +83,7 @@ export default function SettingsScreen() {
                   key={pos}
                   accessibilityRole="button"
                   onPress={() => handleSelectDefaultPosition(pos)}
-                  style={[
-                    styles.posChip,
-                    selected && styles.posChipSelected,
-                  ]}
+                  style={[styles.posChip, selected && styles.posChipSelected]}
                 >
                   <Text
                     style={[

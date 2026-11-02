@@ -297,10 +297,10 @@ export class GameRepository {
       patch.syncedAt !== undefined
         ? patch.syncedAt
         : patch.syncedToSheets === true
-        ? now
-        : patch.syncedToSheets === false
-        ? null
-        : existing.syncedAt;
+          ? now
+          : patch.syncedToSheets === false
+            ? null
+            : existing.syncedAt;
 
     const updated: Game = {
       ...existing,

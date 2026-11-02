@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import {
-  KeyValueBackend,
-  WebStorageDriver,
-} from '../src/storage/database';
+import { KeyValueBackend, WebStorageDriver } from '../src/storage/database';
 import { GameRepository } from '../src/storage/gameRepository';
 import {
   DEFAULT_USER_PREFERENCES,
@@ -198,7 +195,7 @@ describe('GameRepository & PreferencesStore Integration', () => {
     expect(gamesList[0].stats.assists).toBe(1);
   });
 
-  it('reopens today\'s completed game on getOrCreateActiveGame without spawning a phantom Game 2, and creates Game 2 only via startNewGame', async () => {
+  it("reopens today's completed game on getOrCreateActiveGame without spawning a phantom Game 2, and creates Game 2 only via startNewGame", async () => {
     const game1 = await repo.getOrCreateActiveGame('2026-10-31', 'SS');
     await repo.recordEvent({
       gameId: game1.id,

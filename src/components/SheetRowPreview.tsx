@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export interface SheetRowPreviewProps {
   syncedToSheets: boolean;
@@ -69,7 +64,9 @@ export function SheetRowPreview({
           ]}
         >
           <Text style={styles.secondaryButtonTitle}>Export CSV</Text>
-          <Text style={styles.secondaryButtonSub}>Download / Share .csv if needed</Text>
+          <Text style={styles.secondaryButtonSub}>
+            Download / Share .csv if needed
+          </Text>
         </Pressable>
       </View>
     </View>

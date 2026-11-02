@@ -61,18 +61,18 @@ describe('sheetsSyncService', () => {
     const cols = clipboardText.split('\t');
     expect(cols).toHaveLength(23);
     expect(cols[0]).toBe('2026-11-01'); // Col A: Date
-    expect(cols[1]).toBe('CF');         // Col B: Position
-    expect(cols[2]).toBe('2');          // Col C: AB
-    expect(cols[3]).toBe('1');          // Col D: H
-    expect(cols[4]).toBe('0.500');      // Col E: AVG
-    expect(cols[6]).toBe('1');          // Col G: 2B
-    expect(cols[11]).toBe('0.500');     // Col L: OBP
-    expect(cols[12]).toBe('1.000');     // Col M: SLG
-    expect(cols[13]).toBe('1.500');     // Col N: OPS
-    expect(cols[14]).toBe('1');         // Col O: RBI
-    expect(cols[18]).toBe('1');         // Col S: GO
-    expect(cols[19]).toBe('1');         // Col T: PO
-    expect(cols[22]).toBe('1.000');     // Col W: FLD PCT
+    expect(cols[1]).toBe('CF'); // Col B: Position
+    expect(cols[2]).toBe('2'); // Col C: AB
+    expect(cols[3]).toBe('1'); // Col D: H
+    expect(cols[4]).toBe('0.500'); // Col E: AVG
+    expect(cols[6]).toBe('1'); // Col G: 2B
+    expect(cols[11]).toBe('0.500'); // Col L: OBP
+    expect(cols[12]).toBe('1.000'); // Col M: SLG
+    expect(cols[13]).toBe('1.500'); // Col N: OPS
+    expect(cols[14]).toBe('1'); // Col O: RBI
+    expect(cols[18]).toBe('1'); // Col S: GO
+    expect(cols[19]).toBe('1'); // Col T: PO
+    expect(cols[22]).toBe('1.000'); // Col W: FLD PCT
   });
 
   it('leaves AVG, OBP, SLG, OPS, and FLD PCT blank when copying in blank_for_arrayformula mode', async () => {
@@ -92,7 +92,7 @@ describe('sheetsSyncService', () => {
 
     const cols = clipboardText.split('\t');
     expect(cols).toHaveLength(23);
-    expect(cols[4]).toBe('');  // AVG
+    expect(cols[4]).toBe(''); // AVG
     expect(cols[11]).toBe(''); // OBP
     expect(cols[12]).toBe(''); // SLG
     expect(cols[13]).toBe(''); // OPS
