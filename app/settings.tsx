@@ -67,7 +67,9 @@ export default function SettingsScreen() {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
-        <Text style={styles.screenTitle}>Settings</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.screenTitle}>Settings</Text>
+        </View>
 
         {/* Default Starting Position */}
         <View style={styles.card}>
@@ -132,8 +134,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingHorizontal: 14,
+    paddingTop: 6,
     paddingBottom: 28,
     maxWidth: 600,
     width: '100%',
@@ -151,11 +153,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 38,
+    marginBottom: 8,
+  },
   screenTitle: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '700',
     color: '#FFFFFF',
-    marginBottom: 16,
   },
   card: {
     backgroundColor: '#1C1C1E',
