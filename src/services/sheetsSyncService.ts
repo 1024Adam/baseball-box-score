@@ -130,27 +130,22 @@ export async function exportGamesToCsv(
   }
 
   try {
-    const FileSystem = await import('expo-file-system');
+    const { File, Paths } = await import('expo-file-system');
     const Sharing = await import('expo-sharing');
-    const dir = FileSystem.cacheDirectory ?? FileSystem.documentDirectory;
-    if (dir) {
-      const fileUri = `${dir}${filename}`;
-      await FileSystem.writeAsStringAsync(fileUri, csvContent, {
-        encoding: FileSystem.EncodingType.UTF8,
+    const file = new File(Paths.cache, filename);
+    await file.write(csvContent);
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(file.uri, {
+        mimeType: 'text/csv',
+        dialogTitle: 'Export Baseball Box Score CSV',
+        UTI: 'public.comma-separated-values-text',
       });
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(fileUri, {
-          mimeType: 'text/csv',
-          dialogTitle: 'Export Baseball Box Score CSV',
-          UTI: 'public.comma-separated-values-text',
-        });
-        return {
-          filename,
-          csvContent,
-          sharedOrDownloaded: true,
-          message: `Shared ${filename}.`,
-        };
-      }
+      return {
+        filename,
+        csvContent,
+        sharedOrDownloaded: true,
+        message: `Shared ${filename}.`,
+      };
     }
   } catch {
     // Fallback when running in headless Node tests
