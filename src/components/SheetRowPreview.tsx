@@ -5,10 +5,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import { SheetGameRow } from '../domain/types';
 
 export interface SheetRowPreviewProps {
-  stats: SheetGameRow;
   syncedToSheets: boolean;
   onCopyRow: () => Promise<void>;
   onExportCsv: () => Promise<void>;

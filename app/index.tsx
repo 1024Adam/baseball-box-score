@@ -12,6 +12,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BattingPad } from '../src/components/BattingPad';
 import { EventTimeline } from '../src/components/EventTimeline';
 import { FieldingPad } from '../src/components/FieldingPad';
+import {
+  getTodayDateString,
+  shiftDateString,
+} from '../src/domain/liveGameHelpers';
 import { calculateGameStats } from '../src/domain/statCalculator';
 import {
   BattingOutcome,
@@ -27,27 +31,6 @@ import {
 } from '../src/services/hapticsService';
 import { defaultGameRepository } from '../src/storage/gameRepository';
 import { defaultPreferencesStore } from '../src/storage/preferencesStore';
-
-function getTodayDateString(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function shiftDateString(dateStr: string, deltaDays: number): string {
-  const parts = dateStr.split('-').map(Number);
-  if (parts.length !== 3 || parts.some(Number.isNaN)) {
-    return getTodayDateString();
-  }
-  const dt = new Date(parts[0], parts[1] - 1, parts[2]);
-  dt.setDate(dt.getDate() + deltaDays);
-  const y = dt.getFullYear();
-  const m = String(dt.getMonth() + 1).padStart(2, '0');
-  const d = String(dt.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
 
 export default function LiveGameDugoutScreen() {
   const router = useRouter();
@@ -120,14 +103,6 @@ export default function LiveGameDugoutScreen() {
     setEvents(updatedEvents);
   };
 
-  const handleDeleteEvent = async (eventId: string) => {
-    if (!game) return;
-    void triggerMediumHaptic();
-    await defaultGameRepository.deleteEvent(eventId);
-    const updatedEvents = await defaultGameRepository.getEventsForGame(game.id);
-    setEvents(updatedEvents);
-  };
-
   const handleSelectPosition = async (pos: PlayerPosition) => {
     if (!game) return;
     void triggerLightHaptic();
@@ -157,17 +132,15 @@ export default function LiveGameDugoutScreen() {
   const handleStartNewGame = async () => {
     if (!game) return;
     void triggerMediumHaptic();
-    if (events.length > 0) {
-      await defaultGameRepository.updateGameMetadata(game.id, {
-        status: 'completed',
-      });
-    }
-    const newGame = await defaultGameRepository.createNewGame({
-      gameDate: game.gameDate,
-      position: game.position || 'SS',
-    });
+    const newGame = await defaultGameRepository.startNewGame(
+      game.gameDate,
+      game.position || 'RCF'
+    );
+    const updatedEvents = await defaultGameRepository.getEventsForGame(
+      newGame.id
+    );
     setGame(newGame);
-    setEvents([]);
+    setEvents(updatedEvents);
   };
 
   const handleGoToSummary = () => {
@@ -305,7 +278,6 @@ export default function LiveGameDugoutScreen() {
         <EventTimeline
           events={events}
           onUndoLast={handleUndoLast}
-          onDeleteEvent={handleDeleteEvent}
         />
 
         {/* Summary Button */}

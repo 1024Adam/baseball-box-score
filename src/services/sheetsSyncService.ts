@@ -1,9 +1,8 @@
+import { getTodayDateString } from '../domain/liveGameHelpers';
 import {
   SheetFormatterOptions,
   toCsvDocument,
   toTsvRow,
-  toWebhookPayload,
-  WebhookRowPayload,
 } from '../domain/sheetFormatter';
 import { SheetGameRow } from '../domain/types';
 
@@ -26,14 +25,6 @@ export interface CsvExportResult {
   csvContent: string;
   sharedOrDownloaded: boolean;
   message: string;
-}
-
-export interface WebhookPushResult {
-  ok: boolean;
-  rowNumber?: number;
-  sheetName?: string;
-  message: string;
-  payload: WebhookRowPayload;
 }
 
 export interface ClipboardAdapter {
@@ -93,7 +84,7 @@ export async function exportGamesToCsv(
   const dateSuffix =
     rows.length === 1 && rows[0].date
       ? rows[0].date
-      : new Date().toISOString().slice(0, 10);
+      : getTodayDateString();
   const filename =
     options.filename ?? `baseball-box-score-${dateSuffix}.csv`;
 
@@ -159,152 +150,4 @@ export async function exportGamesToCsv(
       rows.length === 1 ? '' : 's'
     }).`,
   };
-}
-
-/**
- * Pushes a 23-column game row to a deployed Google Apps Script Web App URL via HTTPS POST.
- */
-export async function pushGameToWebhook(
-  row: SheetGameRow,
-  webhookUrl: string,
-  options: SheetFormatterOptions = {},
-  fetchImpl: typeof fetch = fetch
-): Promise<WebhookPushResult> {
-  const trimmedUrl = webhookUrl.trim();
-  const payload = toWebhookPayload(row, {
-    formulaMode: options.formulaMode ?? 'webhook_preserve_formulas',
-  });
-
-  if (!trimmedUrl) {
-    return {
-      ok: false,
-      message:
-        'No Google Apps Script Webhook URL configured yet. Paste your URL below or use Copy Row.',
-      payload,
-    };
-  }
-
-  if (!/^https?:\/\//i.test(trimmedUrl)) {
-    return {
-      ok: false,
-      message: 'Webhook URL must start with https://',
-      payload,
-    };
-  }
-
-  try {
-    const response = await fetchImpl(trimmedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      return {
-        ok: false,
-        message: `Webhook returned HTTP ${response.status}`,
-        payload,
-      };
-    }
-
-    let parsed: {
-      ok?: boolean;
-      rowNumber?: number;
-      sheetName?: string;
-      error?: string;
-    } | null = null;
-    try {
-      const text = await response.text();
-      parsed = JSON.parse(text) as {
-        ok?: boolean;
-        rowNumber?: number;
-        sheetName?: string;
-        error?: string;
-      };
-    } catch {
-      // Apps Script redirects on web can return opaque/HTML responses if misconfigured
-    }
-
-    if (parsed && parsed.ok === false) {
-      return {
-        ok: false,
-        message: parsed.error || 'Apps Script reported an error.',
-        payload,
-      };
-    }
-
-    const rowSuffix = parsed?.rowNumber ? ` (Row #${parsed.rowNumber})` : '';
-    return {
-      ok: true,
-      rowNumber: parsed?.rowNumber,
-      sheetName: parsed?.sheetName,
-      message: `Pushed 23-column row to Google Sheets${rowSuffix}!`,
-      payload,
-    };
-  } catch (err) {
-    const errMsg = err instanceof Error ? err.message : String(err);
-    return {
-      ok: false,
-      message: `Failed to reach Google Sheets webhook: ${errMsg}`,
-      payload,
-    };
-  }
-}
-
-/**
- * Tests connectivity to a Google Apps Script Webhook URL without inserting a row.
- */
-export async function testWebhookConnection(
-  webhookUrl: string,
-  fetchImpl: typeof fetch = fetch
-): Promise<{ ok: boolean; message: string }> {
-  const trimmedUrl = webhookUrl.trim();
-  if (!trimmedUrl || !/^https?:\/\//i.test(trimmedUrl)) {
-    return {
-      ok: false,
-      message: 'Enter a valid https:// Apps Script Web App URL first.',
-    };
-  }
-
-  try {
-    const response = await fetchImpl(trimmedUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
-      body: JSON.stringify({ action: 'ping' }),
-    });
-
-    if (!response.ok) {
-      return {
-        ok: false,
-        message: `Webhook returned HTTP ${response.status}`,
-      };
-    }
-
-    const data = (await response.json()) as {
-      ok?: boolean;
-      message?: string;
-      error?: string;
-    };
-    if (data.ok) {
-      return {
-        ok: true,
-        message: data.message ?? 'Connected to Google Sheets webhook!',
-      };
-    }
-    return {
-      ok: false,
-      message: data.error ?? 'Webhook responded with an error.',
-    };
-  } catch (err) {
-    return {
-      ok: false,
-      message: `Connection failed: ${
-        err instanceof Error ? err.message : String(err)
-      }`,
-    };
-  }
 }

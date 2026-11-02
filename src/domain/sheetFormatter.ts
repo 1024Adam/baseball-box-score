@@ -9,7 +9,6 @@ export interface SheetFormatterOptions {
    * Controls how calculated rate columns (`AVG`, `OBP`, `SLG`, `OPS`, `FLD PCT`) are serialized:
    * - `'computed_values'` (default): outputs 3-decimal formatted rate strings (e.g. `0.333`, `1.067`).
    * - `'blank_for_arrayformula'`: outputs `""` in the 5 rate columns so Google Sheet formulas are not overwritten.
-   * - `'webhook_preserve_formulas'`: alias for leaving calculated columns blank when sending raw row cells.
    */
   formulaMode?: SheetFormulaMode;
 
@@ -59,9 +58,7 @@ export function toOrderedCells(
   options: SheetFormatterOptions = {}
 ): string[] {
   const formulaMode = options.formulaMode ?? 'computed_values';
-  const leaveRatesBlank =
-    formulaMode === 'blank_for_arrayformula' ||
-    formulaMode === 'webhook_preserve_formulas';
+  const leaveRatesBlank = formulaMode === 'blank_for_arrayformula';
 
   const rateCell = (val: number | null): string =>
     leaveRatesBlank ? '' : formatRateStat(val, options);
@@ -150,56 +147,3 @@ export function toCsvDocument(
   return lines.join('\n');
 }
 
-export interface WebhookRowPayload {
-  headers: readonly string[];
-  formulaMode: SheetFormulaMode;
-  row: SheetGameRow;
-  cells: (string | number | null)[];
-}
-
-/**
- * Builds the JSON payload for the Google Apps Script webhook receiver.
- */
-export function toWebhookPayload(
-  row: SheetGameRow,
-  options: SheetFormatterOptions = {}
-): WebhookRowPayload {
-  const formulaMode = options.formulaMode ?? 'webhook_preserve_formulas';
-  const leaveRatesBlank =
-    formulaMode === 'blank_for_arrayformula' ||
-    formulaMode === 'webhook_preserve_formulas';
-
-  const rateVal = (val: number | null): number | null =>
-    leaveRatesBlank || val === null ? null : Number(val.toFixed(3));
-
-  return {
-    headers: SHEET_COLUMN_HEADERS,
-    formulaMode,
-    row,
-    cells: [
-      row.date,
-      row.position,
-      row.ab,
-      row.h,
-      rateVal(row.avg),
-      row.singles,
-      row.doubles,
-      row.triples,
-      row.hr,
-      row.eBatting,
-      row.bb,
-      rateVal(row.obp),
-      rateVal(row.slg),
-      rateVal(row.ops),
-      row.rbi,
-      row.fc,
-      row.k,
-      row.fo,
-      row.go,
-      row.po,
-      row.assists,
-      row.errors,
-      rateVal(row.fldPct),
-    ],
-  };
-}

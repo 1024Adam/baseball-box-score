@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
-  applyPositionSelection,
   extractAvailableYears,
   filterSheetGameRows,
   formatLiveBattingLine,
   formatLiveFieldingLine,
-  parsePositions,
+  getTodayDateString,
+  shiftDateString,
 } from '../src/domain/liveGameHelpers';
 import {
   calculateAggregateStats,
@@ -32,17 +32,12 @@ describe('liveGameHelpers', () => {
     ]);
   });
 
-  it('switches or appends positions cleanly for multi-position games', () => {
-    expect(applyPositionSelection('SS', '2B', 'switch')).toBe('2B');
-    expect(applyPositionSelection('SS', '2B', 'append')).toBe('SS / 2B');
-    expect(applyPositionSelection('SS / 2B', 'RV', 'append')).toBe(
-      'SS / 2B / RV'
-    );
-    // Tapping an already-appended position removes it
-    expect(applyPositionSelection('SS / 2B', '2B', 'append')).toBe('SS');
-    // Tapping the only remaining position keeps it
-    expect(applyPositionSelection('SS', 'SS', 'append')).toBe('SS');
-    expect(parsePositions('SS / 2B / RV')).toEqual(['SS', '2B', 'RV']);
+  it('formats local dates and shifts dates across month/year boundaries cleanly', () => {
+    const sampleDate = new Date(2026, 10, 1, 22, 30, 0); // Nov 1, 2026 10:30 PM local
+    expect(getTodayDateString(sampleDate)).toBe('2026-11-01');
+    expect(shiftDateString('2026-11-01', -1)).toBe('2026-10-31');
+    expect(shiftDateString('2026-12-31', 1)).toBe('2027-01-01');
+    expect(shiftDateString('invalid-date', 1)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
   it('formats live batting and fielding box score strip lines', () => {
@@ -123,7 +118,7 @@ describe('liveGameHelpers', () => {
     );
   });
 
-  it('filters and aggregates career stats by position and season year', () => {
+  it('filters and aggregates career stats by season year', () => {
     const g1 = calculateGameStats(
       { gameDate: '2025-07-15', position: 'SS' },
       [
@@ -182,18 +177,16 @@ describe('liveGameHelpers', () => {
 
     expect(extractAvailableYears(allRows)).toEqual(['2026', '2025']);
 
-    const ssOnly = filterSheetGameRows(allRows, {
-      position: 'SS',
+    const allSeasons = filterSheetGameRows(allRows, {
       year: 'ALL',
     });
-    expect(ssOnly).toHaveLength(2);
-    const ssAgg = calculateAggregateStats(ssOnly);
-    expect(ssAgg.games).toBe(2);
-    expect(ssAgg.ab).toBe(3);
-    expect(ssAgg.h).toBe(2);
+    expect(allSeasons).toHaveLength(3);
+    const allAgg = calculateAggregateStats(allSeasons);
+    expect(allAgg.games).toBe(3);
+    expect(allAgg.ab).toBe(4);
+    expect(allAgg.h).toBe(3);
 
     const year2026Only = filterSheetGameRows(allRows, {
-      position: 'ALL',
       year: '2026',
     });
     expect(year2026Only).toHaveLength(2);

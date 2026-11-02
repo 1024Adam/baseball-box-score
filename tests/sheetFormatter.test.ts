@@ -4,7 +4,6 @@ import {
   toCsvDocument,
   toOrderedCells,
   toTsvRow,
-  toWebhookPayload,
 } from '../src/domain/sheetFormatter';
 import { calculateGameStats } from '../src/domain/statCalculator';
 import { GameEvent, SHEET_COLUMN_HEADERS } from '../src/domain/types';
@@ -162,18 +161,5 @@ describe('sheetFormatter', () => {
     expect(formatRateStat(null, { nullRateOutput: '-' })).toBe('-');
     expect(formatRateStat(1 / 3, { omitLeadingZero: true })).toBe('.333');
     expect(formatRateStat(1.0, { omitLeadingZero: true })).toBe('1.000');
-  });
-
-  it('builds a structured webhook payload preserving formula columns by default', () => {
-    const payload = toWebhookPayload(sampleRow);
-
-    expect(payload.headers).toHaveLength(23);
-    expect(payload.formulaMode).toBe('webhook_preserve_formulas');
-    expect(payload.cells).toHaveLength(23);
-    expect(payload.cells[4]).toBeNull();  // AVG
-    expect(payload.cells[11]).toBeNull(); // OBP
-    expect(payload.cells[12]).toBeNull(); // SLG
-    expect(payload.cells[13]).toBeNull(); // OPS
-    expect(payload.cells[22]).toBeNull(); // FLD PCT
   });
 });

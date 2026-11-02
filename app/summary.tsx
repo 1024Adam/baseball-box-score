@@ -12,6 +12,7 @@ import {
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LiveScoreStrip } from '../src/components/LiveScoreStrip';
 import { SheetRowPreview } from '../src/components/SheetRowPreview';
+import { getTodayDateString } from '../src/domain/liveGameHelpers';
 import { calculateGameStats } from '../src/domain/statCalculator';
 import { Game, GameEvent } from '../src/domain/types';
 import {
@@ -24,14 +25,6 @@ import {
 } from '../src/services/sheetsSyncService';
 import { defaultGameRepository } from '../src/storage/gameRepository';
 import { defaultPreferencesStore } from '../src/storage/preferencesStore';
-
-function getTodayDateString(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
 export default function GameSummaryScreen() {
   const router = useRouter();
@@ -205,7 +198,6 @@ export default function GameSummaryScreen() {
 
         {/* Data Sync Card */}
         <SheetRowPreview
-          stats={stats}
           syncedToSheets={game.syncedToSheets}
           onCopyRow={handleCopyRow}
           onExportCsv={handleExportCsv}

@@ -58,10 +58,8 @@ export interface StorageDriver {
   updateGame(game: Game): Promise<void>;
   deleteGame(gameId: string): Promise<void>;
   getEventsForGame(gameId: string): Promise<GameEvent[]>;
-  getEventById(eventId: string): Promise<GameEvent | null>;
   insertEvent(event: GameEvent): Promise<void>;
   deleteEventById(eventId: string): Promise<void>;
-  replaceEventsForGame(gameId: string, events: GameEvent[]): Promise<void>;
   getPreference(key: string): Promise<string | null>;
   setPreference(key: string, value: string, updatedAt: string): Promise<void>;
   clearAll(): Promise<void>;
@@ -218,11 +216,6 @@ export class WebStorageDriver implements StorageDriver {
       .sort((a, b) => a.sequenceNum - b.sequenceNum);
   }
 
-  async getEventById(eventId: string): Promise<GameEvent | null> {
-    const { gameEvents } = this.readState();
-    return gameEvents.find((e) => e.id === eventId) ?? null;
-  }
-
   async insertEvent(event: GameEvent): Promise<void> {
     const state = this.readState();
     state.gameEvents.push({ ...event });
@@ -232,16 +225,6 @@ export class WebStorageDriver implements StorageDriver {
   async deleteEventById(eventId: string): Promise<void> {
     const state = this.readState();
     state.gameEvents = state.gameEvents.filter((e) => e.id !== eventId);
-    this.writeState(state);
-  }
-
-  async replaceEventsForGame(
-    gameId: string,
-    events: GameEvent[]
-  ): Promise<void> {
-    const state = this.readState();
-    const otherEvents = state.gameEvents.filter((e) => e.gameId !== gameId);
-    state.gameEvents = [...otherEvents, ...events.map((e) => ({ ...e }))];
     this.writeState(state);
   }
 
@@ -444,15 +427,6 @@ export class ExpoSqliteDriver implements StorageDriver {
     return rows.map(mapSqliteRowToEvent);
   }
 
-  async getEventById(eventId: string): Promise<GameEvent | null> {
-    const db = await this.getDb();
-    const row = await db.getFirstAsync<SqliteGameEventRow>(
-      `SELECT * FROM game_events WHERE id = ?`,
-      eventId
-    );
-    return row ? mapSqliteRowToEvent(row) : null;
-  }
-
   async insertEvent(event: GameEvent): Promise<void> {
     const db = await this.getDb();
     await db.runAsync(
@@ -474,17 +448,6 @@ export class ExpoSqliteDriver implements StorageDriver {
   async deleteEventById(eventId: string): Promise<void> {
     const db = await this.getDb();
     await db.runAsync(`DELETE FROM game_events WHERE id = ?`, eventId);
-  }
-
-  async replaceEventsForGame(
-    gameId: string,
-    events: GameEvent[]
-  ): Promise<void> {
-    const db = await this.getDb();
-    await db.runAsync(`DELETE FROM game_events WHERE game_id = ?`, gameId);
-    for (const event of events) {
-      await this.insertEvent(event);
-    }
   }
 
   async getPreference(key: string): Promise<string | null> {

@@ -68,7 +68,10 @@ export class GameRepository {
   }
 
   /**
-   * Returns today's active game if one is already in progress, or creates one automatically.
+   * Returns today's active game if one is already in progress, or if a completed game already
+   * exists for `todayDate` returns the most recent game for `todayDate` (preventing phantom
+   * "Game 2" creation on tab switches or app relaunches after syncing). Only creates a new
+   * game automatically when no game exists for `todayDate` at all.
    */
   async getOrCreateActiveGame(
     todayDate: string,
@@ -82,6 +85,59 @@ export class GameRepository {
     );
     if (activeToday) {
       return activeToday;
+    }
+
+    const latestToday = games.find((g) => g.gameDate === todayDate);
+    if (latestToday) {
+      return latestToday;
+    }
+
+    return this.createNewGame({
+      gameDate: todayDate,
+      position: defaultPosition,
+    });
+  }
+
+  /**
+   * Starts a new game when the user explicitly taps `+ New Game`:
+   * - If any existing active game has `0` recorded events, reuses/resets that empty game
+   *   (updating its `gameDate` and `position`) rather than creating orphan `0-for-0` games.
+   * - Marks any existing active games that have `> 0` recorded events as `status: 'completed'`
+   *   before returning/creating the active game.
+   */
+  async startNewGame(
+    todayDate: string,
+    defaultPosition = 'RCF'
+  ): Promise<Game> {
+    const store = await this.driver();
+    const games = await store.getAllGames();
+    const activeGames = games.filter((g) => g.status === 'active');
+
+    let emptyActiveToReuse: Game | null = null;
+
+    for (const activeGame of activeGames) {
+      const events = await store.getEventsForGame(activeGame.id);
+      if (events.length === 0) {
+        if (!emptyActiveToReuse) {
+          emptyActiveToReuse = activeGame;
+        }
+      } else {
+        await this.updateGameMetadata(activeGame.id, {
+          status: 'completed',
+        });
+      }
+    }
+
+    if (emptyActiveToReuse) {
+      return this.updateGameMetadata(emptyActiveToReuse.id, {
+        gameDate: todayDate,
+        position: defaultPosition.trim() || 'RCF',
+        opponent: '',
+        notes: '',
+        status: 'active',
+        syncedToSheets: false,
+        syncedAt: null,
+      });
     }
 
     return this.createNewGame({
@@ -217,36 +273,6 @@ export class GameRepository {
     }
 
     return lastEvent;
-  }
-
-  /**
-   * Removes a specific event by ID and re-sequences remaining events (1..N) to preserve clean sequence order.
-   */
-  async deleteEvent(eventId: string): Promise<void> {
-    const store = await this.driver();
-    const target = await store.getEventById(eventId);
-    if (!target) {
-      return;
-    }
-
-    const remaining = (await store.getEventsForGame(target.gameId))
-      .filter((e) => e.id !== eventId)
-      .sort((a, b) => a.sequenceNum - b.sequenceNum)
-      .map((e, index) => ({
-        ...e,
-        sequenceNum: index + 1,
-      }));
-
-    await store.replaceEventsForGame(target.gameId, remaining);
-
-    const game = await store.getGameById(target.gameId);
-    if (game) {
-      await store.updateGame({
-        ...game,
-        syncedToSheets: false,
-        updatedAt: new Date().toISOString(),
-      });
-    }
   }
 
   /**

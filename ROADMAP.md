@@ -173,10 +173,10 @@ At every milestone, verification follows a three-tier loop:
    - **Unused Package Dependency:** Remove `"query-string"` from `package.json`.
 
 ### Definition of Done / Verification
-- [ ] Completing/copying today's game and switching tabs (or reloading the app) reopens today's completed game without spawning a phantom `0-for-0` game in History.
-- [ ] Tapping `+ New Game` when the current active game has `0` events reuses that game instead of creating duplicate empty games.
-- [ ] Zero dead exports, unused props, or unwired webhook files remain in the codebase.
-- [ ] `npm test` and `npm run typecheck` pass with 0 errors in WSL.
+- [x] Completing/copying today's game and switching tabs (or reloading the app) reopens today's completed game without spawning a phantom `0-for-0` game in History.
+- [x] Tapping `+ New Game` when the current active game has `0` events reuses that game instead of creating duplicate empty games.
+- [x] Zero dead exports, unused props, or unwired webhook files remain in the codebase.
+- [x] `npm test` and `npm run typecheck` pass with 0 errors in WSL.
 
 ---
 

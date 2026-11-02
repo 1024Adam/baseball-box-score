@@ -14,6 +14,7 @@ import { useRouter } from 'expo-router';
 import {
   formatLiveBattingLine,
   formatLiveFieldingLine,
+  getTodayDateString,
 } from '../src/domain/liveGameHelpers';
 import { Game, SheetGameRow } from '../src/domain/types';
 import {
@@ -23,14 +24,6 @@ import {
 import { copyRowToClipboard } from '../src/services/sheetsSyncService';
 import { defaultGameRepository } from '../src/storage/gameRepository';
 import { defaultPreferencesStore } from '../src/storage/preferencesStore';
-
-function getTodayDateString(): string {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
 
 const DELETE_ACTION_WIDTH = 92;
 
@@ -274,10 +267,10 @@ export default function GameHistoryScreen() {
   const handleStartNewGame = async () => {
     void triggerMediumHaptic();
     const prefs = await defaultPreferencesStore.getPreferences();
-    const newGame = await defaultGameRepository.createNewGame({
-      gameDate: getTodayDateString(),
-      position: prefs.lastUsedPosition,
-    });
+    const newGame = await defaultGameRepository.startNewGame(
+      getTodayDateString(),
+      prefs.lastUsedPosition
+    );
     router.replace({
       pathname: '/',
       params: { gameId: newGame.id },

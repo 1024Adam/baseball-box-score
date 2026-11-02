@@ -27,11 +27,6 @@ export type PlayerPosition =
   | 'RV'
   | 'UTL';
 
-export interface PositionOption {
-  code: PlayerPosition;
-  label: string;
-}
-
 export const PLAYER_POSITIONS: readonly PlayerPosition[] = [
   'C',
   'P',
@@ -48,30 +43,13 @@ export const PLAYER_POSITIONS: readonly PlayerPosition[] = [
   'UTL',
 ] as const;
 
-export const POSITION_OPTIONS: readonly PositionOption[] = [
-  { code: 'C', label: 'Catcher' },
-  { code: 'P', label: 'Pitcher' },
-  { code: '1B', label: 'First Base' },
-  { code: '2B', label: 'Second Base' },
-  { code: '3B', label: 'Third Base' },
-  { code: 'SS', label: 'Shortstop' },
-  { code: 'LF', label: 'Left Field' },
-  { code: 'LCF', label: 'Left-Center Field' },
-  { code: 'CF', label: 'Center Field' },
-  { code: 'RCF', label: 'Right-Center Field' },
-  { code: 'RF', label: 'Right Field' },
-  { code: 'RV', label: 'Rover' },
-  { code: 'UTL', label: 'Utility' },
-] as const;
-
 export type EventCategory = 'batting' | 'fielding';
 
 export type GameStatus = 'active' | 'completed';
 
 export type SheetFormulaMode =
   | 'computed_values'
-  | 'blank_for_arrayformula'
-  | 'webhook_preserve_formulas';
+  | 'blank_for_arrayformula';
 
 export interface Game {
   id: string;
@@ -184,21 +162,3 @@ export const SHEET_COLUMN_HEADERS: readonly [
   'FLD PCT',
 ] as const;
 
-export const BATTING_OUTCOMES: readonly BattingOutcome[] = [
-  '1B',
-  '2B',
-  '3B',
-  'HR',
-  'E_BAT',
-  'BB',
-  'FC',
-  'K',
-  'FO',
-  'GO',
-] as const;
-
-export const FIELDING_OUTCOMES: readonly FieldingOutcome[] = [
-  'PO',
-  'ASSIST',
-  'E_FLD',
-] as const;

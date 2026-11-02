@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { getTodayDateString } from '../src/domain/liveGameHelpers';
 import {
   PLAYER_POSITIONS,
   PlayerPosition,
@@ -50,9 +51,7 @@ export default function SettingsScreen() {
     const rows = games.map((g) => g.stats);
     await exportGamesToCsv(rows, {
       formulaMode: 'blank_for_arrayformula',
-      filename: `baseball-box-score-backup-${new Date()
-        .toISOString()
-        .slice(0, 10)}.csv`,
+      filename: `baseball-box-score-backup-${getTodayDateString()}.csv`,
     });
   };
 

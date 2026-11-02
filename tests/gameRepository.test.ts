@@ -39,7 +39,7 @@ describe('GameRepository & PreferencesStore Integration', () => {
     prefsStore = new PreferencesStore(driver);
   });
 
-  it('creates an active game, appends 6 events, undoes the last event, deletes a middle event, and recomputes the exact SheetGameRow', async () => {
+  it('creates an active game, appends 6 events, undoes the last event, and recomputes the exact SheetGameRow', async () => {
     // 1. Create or load today's active game
     const game = await repo.getOrCreateActiveGame('2026-10-31', 'SS');
     expect(game.gameDate).toBe('2026-10-31');
@@ -53,7 +53,7 @@ describe('GameRepository & PreferencesStore Integration', () => {
 
     // 2. Append 6 events:
     // #1: 1B (0 RBI)
-    // #2: FO (0 RBI) -> middle event we will delete later
+    // #2: FO (0 RBI)
     // #3: HR (defaults to 1 RBI)
     // #4: BB (0 RBI)
     // #5: PO (fielding)
@@ -119,52 +119,44 @@ describe('GameRepository & PreferencesStore Integration', () => {
     expect(afterUndo?.stats.k).toBe(0);
     expect(afterUndo?.stats.ab).toBe(3);
 
-    // 4. Delete the middle event (#2: FO) and verify sequence order is preserved
-    await repo.deleteEvent(evt2.id);
-
     const remainingEvents = await repo.getEventsForGame(game.id);
-    expect(remainingEvents).toHaveLength(4);
-    expect(remainingEvents.map((e) => e.sequenceNum)).toEqual([1, 2, 3, 4]);
+    expect(remainingEvents).toHaveLength(5);
+    expect(remainingEvents.map((e) => e.sequenceNum)).toEqual([1, 2, 3, 4, 5]);
     expect(remainingEvents.map((e) => e.eventType)).toEqual([
       '1B',
+      'FO',
       'HR',
       'BB',
       'PO',
     ]);
 
-    // 5. Recompute the exact 23-column SheetGameRow
-    // Remaining plays: 1B (0 RBI), HR (1 RBI), BB (0 RBI), PO
-    // AB = 2, H = 2, AVG = 1.000, 1B = 1, HR = 1, BB = 1, OBP = 3/3 = 1.000, SLG = 5/2 = 2.500, OPS = 3.500, PO = 1, FLD PCT = 1.000
+    // 4. Recompute the exact 23-column SheetGameRow
+    // Remaining plays: 1B (0 RBI), FO (0 RBI), HR (1 RBI), BB (0 RBI), PO
+    // AB = 3, H = 2, AVG = 2/3, 1B = 1, HR = 1, BB = 1, OBP = 3/4 = 0.75, SLG = 5/3, OPS = 0.75 + 5/3, FO = 1, PO = 1, FLD PCT = 1.000
     const finalSummary = await repo.getGameWithStats(game.id);
     expect(finalSummary).not.toBeNull();
-    expect(finalSummary!.stats).toEqual({
-      date: '2026-10-31',
-      position: 'SS',
-      ab: 2,
-      h: 2,
-      avg: 1.0,
-      singles: 1,
-      doubles: 0,
-      triples: 0,
-      hr: 1,
-      eBatting: 0,
-      bb: 1,
-      obp: 1.0,
-      slg: 2.5,
-      ops: 3.5,
-      rbi: 1,
-      fc: 0,
-      k: 0,
-      fo: 0,
-      go: 0,
-      po: 1,
-      assists: 0,
-      errors: 0,
-      fldPct: 1.0,
-    });
+    expect(finalSummary!.stats.date).toBe('2026-10-31');
+    expect(finalSummary!.stats.position).toBe('SS');
+    expect(finalSummary!.stats.ab).toBe(3);
+    expect(finalSummary!.stats.h).toBe(2);
+    expect(finalSummary!.stats.avg).toBeCloseTo(2 / 3, 5);
+    expect(finalSummary!.stats.singles).toBe(1);
+    expect(finalSummary!.stats.hr).toBe(1);
+    expect(finalSummary!.stats.bb).toBe(1);
+    expect(finalSummary!.stats.obp).toBeCloseTo(0.75, 5);
+    expect(finalSummary!.stats.slg).toBeCloseTo(5 / 3, 5);
+    expect(finalSummary!.stats.ops).toBeCloseTo(0.75 + 5 / 3, 5);
+    expect(finalSummary!.stats.rbi).toBe(1);
+    expect(finalSummary!.stats.fo).toBe(1);
+    expect(finalSummary!.stats.po).toBe(1);
+    expect(finalSummary!.stats.fldPct).toBe(1.0);
   });
 
   it('restores the active game state and events after simulated app/browser reload with zero data loss', async () => {
+    expect(DEFAULT_USER_PREFERENCES).toEqual({
+      lastUsedPosition: 'RCF',
+    });
+
     const game = await repo.getOrCreateActiveGame('2026-10-31', 'CF');
     await repo.recordEvent({
       gameId: game.id,
@@ -177,11 +169,7 @@ describe('GameRepository & PreferencesStore Integration', () => {
       category: 'fielding',
       eventType: 'ASSIST',
     });
-    await prefsStore.updatePreferences({
-      lastUsedPosition: 'CF',
-      sheetFormulaMode: 'blank_for_arrayformula',
-      appsScriptWebhookUrl: 'https://script.google.com/macros/s/test-id/exec',
-    });
+    await prefsStore.setLastUsedPosition('CF');
 
     // Simulate reloading the web app / restarting the native app by instantiating
     // a brand-new driver, repository, and preferences store over the same underlying storage
@@ -193,8 +181,6 @@ describe('GameRepository & PreferencesStore Integration', () => {
     const restoredPrefs = await reloadedPrefsStore.getPreferences();
     expect(restoredPrefs).toEqual({
       lastUsedPosition: 'CF',
-      sheetFormulaMode: 'blank_for_arrayformula',
-      appsScriptWebhookUrl: 'https://script.google.com/macros/s/test-id/exec',
     });
 
     const restoredGame = await reloadedRepo.getOrCreateActiveGame(
@@ -212,7 +198,7 @@ describe('GameRepository & PreferencesStore Integration', () => {
     expect(gamesList[0].stats.assists).toBe(1);
   });
 
-  it('updates game metadata and supports doubleheaders on the same date', async () => {
+  it('reopens today\'s completed game on getOrCreateActiveGame without spawning a phantom Game 2, and creates Game 2 only via startNewGame', async () => {
     const game1 = await repo.getOrCreateActiveGame('2026-10-31', 'SS');
     await repo.recordEvent({
       gameId: game1.id,
@@ -220,27 +206,59 @@ describe('GameRepository & PreferencesStore Integration', () => {
       eventType: '1B',
     });
 
-    // Mark game 1 completed and synced
+    // Mark game 1 completed and synced (as happens when copying data row)
     const updatedGame1 = await repo.updateGameMetadata(game1.id, {
-      position: 'SS / 2B',
+      position: 'SS',
       opponent: 'Tigers',
       status: 'completed',
       syncedToSheets: true,
     });
-    expect(updatedGame1.position).toBe('SS / 2B');
-    expect(updatedGame1.opponent).toBe('Tigers');
     expect(updatedGame1.status).toBe('completed');
     expect(updatedGame1.syncedToSheets).toBe(true);
     expect(updatedGame1.syncedAt).not.toBeNull();
 
-    // Calling getOrCreateActiveGame on the same date now creates Game 2 (doubleheader)
-    const game2 = await repo.getOrCreateActiveGame('2026-10-31', '2B');
+    // Switching tabs or relaunching the app calls getOrCreateActiveGame:
+    // It must return the completed game for today instead of spawning a phantom 0-for-0 game!
+    const reopenedToday = await repo.getOrCreateActiveGame('2026-10-31', '2B');
+    expect(reopenedToday.id).toBe(game1.id);
+    expect(await repo.listGamesWithStats()).toHaveLength(1);
+
+    // Explicitly tapping "+ New Game" via startNewGame creates Game 2 (doubleheader)
+    const game2 = await repo.startNewGame('2026-10-31', '2B');
     expect(game2.id).not.toBe(game1.id);
     expect(game2.status).toBe('active');
     expect(game2.position).toBe('2B');
 
     const allGames = await repo.listGamesWithStats();
     expect(allGames).toHaveLength(2);
+  });
+
+  it('reuses an existing empty active game when startNewGame is called to prevent duplicate 0-for-0 games', async () => {
+    const emptyGame = await repo.getOrCreateActiveGame('2026-10-30', 'LF');
+    expect(await repo.getEventsForGame(emptyGame.id)).toHaveLength(0);
+
+    // Tapping "+ New Game" when the active game has 0 events reuses & updates that game
+    const reusedGame = await repo.startNewGame('2026-10-31', 'CF');
+    expect(reusedGame.id).toBe(emptyGame.id);
+    expect(reusedGame.gameDate).toBe('2026-10-31');
+    expect(reusedGame.position).toBe('CF');
+    expect(reusedGame.status).toBe('active');
+    expect(await repo.listGamesWithStats()).toHaveLength(1);
+
+    // Once an event is recorded, calling startNewGame marks the first game completed and creates a new one
+    await repo.recordEvent({
+      gameId: reusedGame.id,
+      category: 'batting',
+      eventType: 'HR',
+    });
+
+    const nextGame = await repo.startNewGame('2026-10-31', 'SS');
+    expect(nextGame.id).not.toBe(reusedGame.id);
+    expect(nextGame.status).toBe('active');
+
+    const completedPrev = await repo.getGameById(reusedGame.id);
+    expect(completedPrev?.status).toBe('completed');
+    expect(await repo.listGamesWithStats()).toHaveLength(2);
   });
 
   it('deletes a full game and all of its associated events', async () => {

@@ -5,7 +5,6 @@ import { GameEvent } from '../domain/types';
 export interface EventTimelineProps {
   events: readonly GameEvent[];
   onUndoLast: () => void;
-  onDeleteEvent?: (eventId: string) => void;
 }
 
 export function EventTimeline({

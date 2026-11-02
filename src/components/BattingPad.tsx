@@ -122,11 +122,7 @@ export function BattingPad({ stats, onRecordBatting }: BattingPadProps) {
                 </View>
               )}
               <Text style={styles.buttonMainText}>{btn.label}</Text>
-              <Text style={styles.buttonSubText}>
-                {btn.outcome === 'HR' && selectedRbi === null
-                  ? 'Home Run'
-                  : btn.subtitle}
-              </Text>
+              <Text style={styles.buttonSubText}>{btn.subtitle}</Text>
             </Pressable>
           );
         })}

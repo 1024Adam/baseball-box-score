@@ -1,5 +1,31 @@
 import { formatRateStat } from './sheetFormatter';
-import { PlayerPosition, SheetGameRow } from './types';
+import { SheetGameRow } from './types';
+
+/**
+ * Returns today's local calendar date formatted as `YYYY-MM-DD`.
+ */
+export function getTodayDateString(now: Date = new Date()): string {
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Shifts a `YYYY-MM-DD` date string by `deltaDays` in local time.
+ */
+export function shiftDateString(dateStr: string, deltaDays: number): string {
+  const parts = dateStr.split('-').map(Number);
+  if (parts.length !== 3 || parts.some(Number.isNaN)) {
+    return getTodayDateString();
+  }
+  const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+  dt.setDate(dt.getDate() + deltaDays);
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth() + 1).padStart(2, '0');
+  const d = String(dt.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
 
 /**
  * Formats a compact live batting summary line for the dugout header:
@@ -55,50 +81,8 @@ export function formatLiveFieldingLine(stats: SheetGameRow): string {
   return `${stats.po} PO | ${stats.assists} A | ${stats.errors} E | ${fldText} FLD`;
 }
 
-/**
- * Parses a game's position string (e.g. `"SS / 2B"`) into individual position codes.
- */
-export function parsePositions(positionStr: string): string[] {
-  return positionStr
-    .split('/')
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-/**
- * Updates a game's position string when a user taps a position pill:
- * - In `'switch'` mode, replaces the position with `selectedPosition`.
- * - In `'append'` mode, toggles `selectedPosition` in the `/` separated list
- *   (e.g. `"SS"` + `"2B"` -> `"SS / 2B"`), always keeping at least one position.
- */
-export function applyPositionSelection(
-  currentPosition: string,
-  selectedPosition: PlayerPosition | string,
-  mode: 'switch' | 'append'
-): string {
-  const target = selectedPosition.trim();
-  if (!target) {
-    return currentPosition || 'SS';
-  }
-
-  if (mode === 'switch') {
-    return target;
-  }
-
-  const currentList = parsePositions(currentPosition);
-  if (currentList.includes(target)) {
-    if (currentList.length === 1) {
-      return target;
-    }
-    return currentList.filter((p) => p !== target).join(' / ');
-  }
-
-  return [...currentList, target].join(' / ');
-}
-
 export interface CareerFilterOptions {
-  position?: string; // 'ALL' or a specific position like 'SS', 'CF'
-  year?: string;     // 'ALL' or a 4-digit year like '2026'
+  year?: string; // 'ALL' or a 4-digit year like '2026'
 }
 
 /**
@@ -116,22 +100,15 @@ export function extractAvailableYears(rows: readonly SheetGameRow[]): string[] {
 }
 
 /**
- * Filters an array of `SheetGameRow` records by position and/or 4-digit year.
+ * Filters an array of `SheetGameRow` records by 4-digit season year.
  */
 export function filterSheetGameRows(
   rows: readonly SheetGameRow[],
   filter: CareerFilterOptions
 ): SheetGameRow[] {
-  const targetPosition = filter.position?.trim();
   const targetYear = filter.year?.trim();
 
   return rows.filter((row) => {
-    if (targetPosition && targetPosition !== 'ALL') {
-      const rowPositions = parsePositions(row.position);
-      if (!rowPositions.includes(targetPosition)) {
-        return false;
-      }
-    }
     if (targetYear && targetYear !== 'ALL') {
       if (!row.date.startsWith(targetYear)) {
         return false;
