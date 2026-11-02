@@ -44,10 +44,6 @@ export function BottomNavBar() {
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
 
-  if (pathname === '/summary') {
-    return null;
-  }
-
   const bottomPadding =
     Platform.OS === 'web' ? 14 : Math.max(insets.bottom, 20);
 

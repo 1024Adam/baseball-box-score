@@ -108,7 +108,10 @@ export default function GameSummaryScreen() {
 
   if (loading || !game) {
     return (
-      <SafeAreaView style={styles.loadingScreen}>
+      <SafeAreaView
+        edges={['top', 'left', 'right']}
+        style={styles.loadingScreen}
+      >
         <ActivityIndicator size="large" color="#0A84FF" />
         <Text style={styles.loadingText}>Loading Summary...</Text>
       </SafeAreaView>
@@ -118,7 +121,7 @@ export default function GameSummaryScreen() {
   const stats = calculateGameStats(game, events);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
