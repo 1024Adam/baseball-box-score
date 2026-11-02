@@ -229,6 +229,9 @@ baseball-box-score/
 │       ├── code-quality.yml      # TypeScript typecheck, ESLint, and Prettier check
 │       ├── test.yml              # Vitest unit & integration test suite
 │       └── build.yml             # Expo Metro production bundle export check
+├── docs/
+│   ├── ARCHITECTURE.md           # Domain model, 23-column sheet contract, and data flow
+│   └── ROADMAP.md                # Sequential 7-milestone development roadmap
 ├── app/                          # Expo Router screens
 │   ├── _layout.tsx               # Bottom tab navigation (Live Game, History, Career, Settings)
 │   ├── index.tsx                 # Live Game Dugout Screen (default launch screen)

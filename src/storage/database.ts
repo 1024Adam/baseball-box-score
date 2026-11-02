@@ -8,7 +8,7 @@ import {
 } from '../domain/types';
 
 /**
- * Exact SQLite schema from ARCHITECTURE.md section 4.1.
+ * Exact SQLite schema from docs/ARCHITECTURE.md section 4.1.
  */
 export const SQLITE_SCHEMA_MIGRATIONS = `
 PRAGMA foreign_keys = ON;

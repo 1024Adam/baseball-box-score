@@ -74,14 +74,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1C1C1E',
     borderRadius: 16,
-    padding: 12,
-    marginBottom: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginBottom: 8,
   },
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   row: {
     flexDirection: 'row',
@@ -89,9 +90,9 @@ const styles = StyleSheet.create({
   },
   fieldButton: {
     flex: 1,
-    minHeight: 62,
+    minHeight: 54,
     borderRadius: 12,
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 6,
     alignItems: 'center',
     justifyContent: 'center',

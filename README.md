@@ -53,8 +53,8 @@ Scan the terminal QR code with your iPhone Camera to open the app natively in **
 
 ## Project Architecture & Roadmap
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — Domain model, 23-column Google Sheets contract, SQLite schema, and system data flow.
-- [ROADMAP.md](./ROADMAP.md) — Sequential 5-milestone development plan.
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) — Domain model, 23-column Google Sheets contract, SQLite schema, and system data flow.
+- [docs/ROADMAP.md](./docs/ROADMAP.md) — Sequential 7-milestone development plan.
 
 ---
 

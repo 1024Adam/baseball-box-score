@@ -1,7 +1,8 @@
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { usePathname, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { triggerLightHaptic } from '../services/hapticsService';
 
 interface TabItem {
@@ -41,13 +42,17 @@ const TABS: readonly TabItem[] = [
 export function BottomNavBar() {
   const router = useRouter();
   const pathname = usePathname();
+  const insets = useSafeAreaInsets();
 
   if (pathname === '/summary') {
     return null;
   }
 
+  const bottomPadding =
+    Platform.OS === 'web' ? 14 : Math.max(insets.bottom, 20);
+
   return (
-    <View style={styles.tabBar}>
+    <View style={[styles.tabBar, { paddingBottom: bottomPadding }]}>
       <View style={styles.tabInner}>
         {TABS.map((tab) => {
           const isActive =
@@ -74,7 +79,7 @@ export function BottomNavBar() {
             >
               <Ionicons
                 name={isActive ? tab.activeIcon : tab.icon}
-                size={24}
+                size={25}
                 color={isActive ? '#FFFFFF' : '#8E8E93'}
               />
             </Pressable>
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C1C1E',
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: '#38383A',
-    paddingVertical: 10,
+    paddingTop: 10,
   },
   tabInner: {
     flexDirection: 'row',
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 4,
+    paddingVertical: 8,
   },
   pressed: {
     opacity: 0.7,

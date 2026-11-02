@@ -11,7 +11,7 @@ export interface StatCalculationOptions {
   /**
    * When true, Reached on Error (E_BAT) is included in the numerator of OBP:
    * (H + BB + E_BAT) / (AB + BB).
-   * Defaults to false per standard baseball rules and ARCHITECTURE.md section 3.1:
+   * Defaults to false per standard baseball rules and docs/ARCHITECTURE.md section 3.1:
    * (H + BB) / (AB + BB).
    */
   includeReachedOnErrorInObp?: boolean;
