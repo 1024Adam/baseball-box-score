@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { BattingPad } from '../src/components/BattingPad';
 import { EventTimeline } from '../src/components/EventTimeline';
@@ -154,7 +154,10 @@ export default function LiveGameDugoutScreen() {
 
   if (loading || !game) {
     return (
-      <SafeAreaView style={styles.loadingScreen}>
+      <SafeAreaView
+        edges={['top', 'left', 'right']}
+        style={styles.loadingScreen}
+      >
         <ActivityIndicator size="large" color="#0A84FF" />
         <Text style={styles.loadingText}>Loading Game...</Text>
       </SafeAreaView>
@@ -164,7 +167,7 @@ export default function LiveGameDugoutScreen() {
   const stats = calculateGameStats(game, events);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

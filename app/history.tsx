@@ -10,12 +10,12 @@ import {
   Animated,
   PanResponder,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import {
   formatLiveBattingLine,
@@ -285,7 +285,10 @@ export default function GameHistoryScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingScreen}>
+      <SafeAreaView
+        edges={['top', 'left', 'right']}
+        style={styles.loadingScreen}
+      >
         <ActivityIndicator size="large" color="#0A84FF" />
         <Text style={styles.loadingText}>Loading Game History...</Text>
       </SafeAreaView>
@@ -293,7 +296,7 @@ export default function GameHistoryScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

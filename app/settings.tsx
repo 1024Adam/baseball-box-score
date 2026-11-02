@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getTodayDateString } from '../src/domain/liveGameHelpers';
 import { PLAYER_POSITIONS, PlayerPosition } from '../src/domain/types';
 import {
@@ -54,7 +54,10 @@ export default function SettingsScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingScreen}>
+      <SafeAreaView
+        edges={['top', 'left', 'right']}
+        style={styles.loadingScreen}
+      >
         <ActivityIndicator size="large" color="#0A84FF" />
         <Text style={styles.loadingText}>Loading Settings...</Text>
       </SafeAreaView>
@@ -62,7 +65,7 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

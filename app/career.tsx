@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   extractAvailableYears,
   filterSheetGameRows,
@@ -43,7 +43,10 @@ export default function CareerStatsScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingScreen}>
+      <SafeAreaView
+        edges={['top', 'left', 'right']}
+        style={styles.loadingScreen}
+      >
         <ActivityIndicator size="large" color="#0A84FF" />
         <Text style={styles.loadingText}>Loading Career Stats...</Text>
       </SafeAreaView>
@@ -78,7 +81,7 @@ export default function CareerStatsScreen() {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
