@@ -224,6 +224,11 @@ flowchart TD
 
 ```text
 baseball-box-score/
+├── .github/
+│   └── workflows/                # Automated GitHub Actions CI pipelines
+│       ├── code-quality.yml      # TypeScript typecheck, ESLint, and Prettier check
+│       ├── test.yml              # Vitest unit & integration test suite
+│       └── build.yml             # Expo Metro production bundle export check
 ├── app/                          # Expo Router screens
 │   ├── _layout.tsx               # Bottom tab navigation (Live Game, History, Career, Settings)
 │   ├── index.tsx                 # Live Game Dugout Screen (default launch screen)

@@ -1,6 +1,6 @@
 # Baseball Box Score — Sequential Development Roadmap
 
-This roadmap breaks the development of the Baseball Box Score iOS app into **6 sequential vertical milestones**. Each milestone produces a working, verifiable increment that can be tested inside **WSL Ubuntu** on Windows before deploying to a physical iPhone via **Expo Go**.
+This roadmap breaks the development of the Baseball Box Score iOS app into **7 sequential vertical milestones**. Each milestone produces a working, verifiable increment that can be tested inside **WSL Ubuntu** on Windows before deploying to a physical iPhone via **Expo Go**.
 
 ---
 
@@ -177,3 +177,32 @@ At every milestone, verification follows a three-tier loop:
 - [ ] Tapping `+ New Game` when the current active game has `0` events reuses that game instead of creating duplicate empty games.
 - [ ] Zero dead exports, unused props, or unwired webhook files remain in the codebase.
 - [ ] `npm test` and `npm run typecheck` pass with 0 errors in WSL.
+
+---
+
+## Milestone 7: GitHub Actions CI & Code Quality Workflows
+
+**Objective:** Add automated code quality (typechecking, linting, formatting), unit/integration test, and Expo bundle build checks that run both locally in WSL (`npm run ...`) and automatically in GitHub Actions on every push and pull request.
+
+### Tasks
+1. **Configure Linting, Formatting & Build Scripts (`package.json`, `eslint.config.mjs`, `.prettierrc`):**
+   - Install and configure **ESLint** (TypeScript + React/React Hooks rules) and **Prettier** so code style and static analysis are enforced consistently.
+   - Format any existing files that do not yet match `.prettierrc`.
+   - Ensure `package.json` exposes clear, standard scripts for local and CI execution:
+     - `"typecheck": "tsc --noEmit"`
+     - `"lint": "eslint \"app/**/*.{ts,tsx}\" \"src/**/*.{ts,tsx}\" \"tests/**/*.ts\""`
+     - `"format": "prettier --write \"app/**/*.{ts,tsx}\" \"src/**/*.{ts,tsx}\" \"tests/**/*.ts\""`
+     - `"format:check": "prettier --check \"app/**/*.{ts,tsx}\" \"src/**/*.{ts,tsx}\" \"tests/**/*.ts\""`
+     - `"test": "vitest run"`
+     - `"build": "expo export --platform web"` (verifies Metro bundles all Expo Router screens, components, and assets cleanly on Linux runners without requiring macOS/Apple signing certificates).
+2. **Create GitHub Actions Workflows (`.github/workflows/`):**
+   - Implement GitHub Actions workflow(s) triggered on `push` (to `main`) and `pull_request` running on `ubuntu-latest` with Node 20 and `npm ci` caching across three distinct checks:
+     1. **Code Quality / Linting / Formatting (`.github/workflows/code-quality.yml`):** Runs `npm run typecheck`, `npm run lint`, and `npm run format:check`.
+     2. **Tests (`.github/workflows/test.yml`):** Runs `npm test` (Vitest unit & repository integration suite).
+     3. **Build (`.github/workflows/build.yml`):** Runs `npm run build` (`npx expo export --platform web`) to verify the full production Metro bundle compiles with zero unresolved imports or asset errors.
+
+### Definition of Done / Verification
+- [ ] `npm run typecheck`, `npm run lint`, and `npm run format:check` pass with 0 errors or warnings in WSL.
+- [ ] `npm test` passes 100% in WSL.
+- [ ] `npm run build` (`expo export --platform web`) succeeds cleanly in WSL.
+- [ ] `.github/workflows/code-quality.yml`, `.github/workflows/test.yml`, and `.github/workflows/build.yml` are valid and ready for GitHub Actions execution.
