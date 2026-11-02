@@ -30,10 +30,10 @@ export function EventTimeline({ events, onUndoLast }: EventTimelineProps) {
           ]}
         >
           {lastEvent
-            ? `↶ Undo Last Play (${lastEvent.eventType}${
+            ? `Undo Last Play (${lastEvent.eventType}${
                 lastEvent.rbi > 0 ? ` +${lastEvent.rbi} RBI` : ''
               })`
-            : '↶ Undo Last Play'}
+            : 'Undo Last Play'}
         </Text>
       </Pressable>
     </View>

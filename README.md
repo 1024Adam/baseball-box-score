@@ -15,7 +15,7 @@ Designed to replace manual in-game Apple Notes logging in the dugout and sync se
   - **Outs**: `FO` (Fly / Line Out), `GO` (Ground Out), `K` (Strikeout)
   - **RBIs**: Full-width `0 | +1 | +2 | +3 | +4` quick bar (`HR` defaults to `1 RBI`)
   - **Fielding Chances**: `PO` (Putout), `A` (Assist), `E` (Fielding Error)
-  - **1-Tap Undo**: Instant `↶ UNDO LAST PLAY` backed by an append-only event log
+  - **1-Tap Undo**: Instant `UNDO LAST PLAY` backed by an append-only event log
 - **Local-First & Offline-Resilient**: Every play is persisted immediately on-device (`expo-sqlite` on iOS, `localStorage` on Web) with full support for doubleheaders on the same date.
 - **23-Column Google Sheets Sync**:
   - Outputs tab-separated (`TSV`) rows and `.csv` exports aligned to:
