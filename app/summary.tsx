@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Animated,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -33,41 +32,6 @@ export default function GameSummaryScreen() {
   const [game, setGame] = useState<Game | null>(null);
   const [events, setEvents] = useState<GameEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [toastText, setToastText] = useState<string | null>(null);
-  const toastOpacity = useRef(new Animated.Value(0)).current;
-  const toastAnimRef = useRef<Animated.CompositeAnimation | null>(null);
-
-  const showFloatingToast = useCallback(
-    (message: string) => {
-      if (toastAnimRef.current) {
-        toastAnimRef.current.stop();
-      }
-      setToastText(message);
-      toastOpacity.setValue(0);
-
-      const anim = Animated.sequence([
-        Animated.timing(toastOpacity, {
-          toValue: 1,
-          duration: 180,
-          useNativeDriver: true,
-        }),
-        Animated.delay(1100),
-        Animated.timing(toastOpacity, {
-          toValue: 0,
-          duration: 220,
-          useNativeDriver: true,
-        }),
-      ]);
-
-      toastAnimRef.current = anim;
-      anim.start(({ finished }) => {
-        if (finished) {
-          setToastText(null);
-        }
-      });
-    },
-    [toastOpacity]
-  );
 
   const loadGameSummary = useCallback(async () => {
     setLoading(true);
@@ -123,7 +87,6 @@ export default function GameSummaryScreen() {
       }
     );
     setGame(updatedGame);
-    showFloatingToast('✓ Copied data row');
   };
 
   const handleExportCsv = async () => {
@@ -156,17 +119,6 @@ export default function GameSummaryScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {toastText && (
-        <Animated.View
-          pointerEvents="none"
-          style={[styles.floatingToastContainer, { opacity: toastOpacity }]}
-        >
-          <View style={styles.floatingToastPill}>
-            <Text style={styles.floatingToastText}>{toastText}</Text>
-          </View>
-        </Animated.View>
-      )}
-
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -211,31 +163,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#000000',
-    position: 'relative',
-  },
-  floatingToastContainer: {
-    position: 'absolute',
-    top: 14,
-    left: 16,
-    right: 16,
-    zIndex: 50,
-    alignItems: 'center',
-  },
-  floatingToastPill: {
-    backgroundColor: '#2C2C2E',
-    borderRadius: 999,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-    elevation: 6,
-  },
-  floatingToastText: {
-    color: '#30D158',
-    fontSize: 15,
-    fontWeight: '600',
   },
   scrollView: {
     flex: 1,
