@@ -235,7 +235,7 @@ baseball-box-score/
 ├── app/                          # Expo Router screens
 │   ├── _layout.tsx               # Bottom tab navigation (Live Game, History, Career, Settings)
 │   ├── index.tsx                 # Live Game Dugout Screen (default launch screen)
-│   ├── summary.tsx               # Game Box Score Summary & Data Sync screen
+│   ├── summary.tsx               # Game Box Score Summary, Data Sync & Finish Game screen
 │   ├── history.tsx               # Past Games list & sync status
 │   ├── career.tsx                # Cumulative season/career stats dashboard
 │   └── settings.tsx              # Default position & full CSV backup
@@ -258,6 +258,7 @@ baseball-box-score/
 │       ├── BattingPad.tsx
 │       ├── FieldingPad.tsx
 │       ├── EventTimeline.tsx
+│       ├── SecondaryButton.tsx   # Shared secondary button (Export CSV, Finish Game, Undo)
 │       └── SheetRowPreview.tsx
 └── tests/                        # Unit & integration tests (run directly in WSL)
     ├── statCalculator.test.ts

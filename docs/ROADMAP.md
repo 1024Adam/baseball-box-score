@@ -88,7 +88,7 @@ At every milestone, verification follows a three-tier loop:
 3. **Fielding Action Pad (`src/components/FieldingPad.tsx`):**
    - Three large single-tap neutral buttons: **`PO`** (Putout), **`A`** (Assist), and **`E`** (Error) with immediate counter badges.
 4. **1-Tap Undo Last Play (`src/components/EventTimeline.tsx`):**
-   - Prominent amber/yellow **Undo Last Play** button in the thumb zone (no cluttering play-by-play list on the main screen).
+   - Prominent **Undo Last Play** button in the thumb zone, using the shared `SecondaryButton` style (no cluttering play-by-play list on the main screen).
    - Trigger `expo-haptics` light/medium impact on native iOS taps.
 5. **Submit Button (`app/index.tsx` -> `app/summary.tsx`):**
    - Bottom **`SUMMARY →`** button on the main logging screen navigates to the dedicated Summary & Export screen (`app/summary.tsx`) with a **`← Back`** button and iOS swipe-back gesture.
@@ -113,6 +113,11 @@ At every milestone, verification follows a three-tier loop:
    - Marks the game as `Completed & Synced`.
 3. **CSV Export (`src/services/sheetsSyncService.ts`):**
    - Secondary button that exports selected or all unsynced games as a `.csv` file (downloads in browser on Web; opens iOS Share Sheet via `expo-file-system` / `expo-sharing` on iPhone).
+4. **Finish Game Button (`app/summary.tsx`):**
+   - **`Finish Game`** button below the Data Sync card, shown only while the game is `active`. Tapping it triggers a medium haptic, sets the game to `status: 'completed'` (without changing `syncedToSheets`), and navigates to the History tab (`/history`).
+   - Games can be finished without copying or exporting first; they remain `Unsynced` in History until synced.
+5. **Shared Secondary Button Style (`src/components/SecondaryButton.tsx`):**
+   - All secondary actions (`Export CSV`, `Finish Game`, `Undo Last Play`) use one `SecondaryButton` component: `#2C2C2E` background, 12px radius, 50px min height, white 16pt semibold title, and an optional `disabled` state (45% opacity, gray title).
 
 ### Definition of Done / Verification
 - [x] Copy a game row from the app and paste it into the user's Google Sheet; verify all 23 columns align with `Date, Position, AB, H, AVG, 1B, 2B, 3B, HR, E (Batting), BB, OBP, SLG, OPS, RBI, FC, K, FO, GO, PO, Assists, Errors, FLD PCT`.
