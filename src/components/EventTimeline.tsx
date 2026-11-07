@@ -1,6 +1,7 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { GameEvent } from '../domain/types';
+import { SecondaryButton } from './SecondaryButton';
 
 export interface EventTimelineProps {
   events: readonly GameEvent[];
@@ -12,30 +13,18 @@ export function EventTimeline({ events, onUndoLast }: EventTimelineProps) {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Undo Last Play"
-        disabled={!lastEvent}
-        onPress={onUndoLast}
-        style={({ pressed }) => [
-          styles.undoButton,
-          !lastEvent && styles.undoButtonDisabled,
-          pressed && lastEvent && styles.pressed,
-        ]}
-      >
-        <Text
-          style={[
-            styles.undoButtonTitle,
-            !lastEvent && styles.undoButtonTitleDisabled,
-          ]}
-        >
-          {lastEvent
+      <SecondaryButton
+        title={
+          lastEvent
             ? `Undo Last Play (${lastEvent.eventType}${
                 lastEvent.rbi > 0 ? ` +${lastEvent.rbi} RBI` : ''
               })`
-            : 'Undo Last Play'}
-        </Text>
-      </Pressable>
+            : 'Undo Last Play'
+        }
+        accessibilityLabel="Undo Last Play"
+        disabled={!lastEvent}
+        onPress={onUndoLast}
+      />
     </View>
   );
 }
@@ -43,28 +32,5 @@ export function EventTimeline({ events, onUndoLast }: EventTimelineProps) {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 8,
-  },
-  undoButton: {
-    backgroundColor: '#1C1C1E',
-    borderRadius: 14,
-    minHeight: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 14,
-  },
-  undoButtonDisabled: {
-    backgroundColor: '#1C1C1E',
-    opacity: 0.45,
-  },
-  undoButtonTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  undoButtonTitleDisabled: {
-    color: '#8E8E93',
-  },
-  pressed: {
-    opacity: 0.7,
   },
 });

@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LiveScoreStrip } from '../src/components/LiveScoreStrip';
+import { SecondaryButton } from '../src/components/SecondaryButton';
 import { SheetRowPreview } from '../src/components/SheetRowPreview';
 import { getTodayDateString } from '../src/domain/liveGameHelpers';
 import { calculateGameStats } from '../src/domain/statCalculator';
@@ -106,6 +107,15 @@ export default function GameSummaryScreen() {
     setGame(updatedGame);
   };
 
+  const handleFinishGame = async () => {
+    if (!game) return;
+    void triggerMediumHaptic();
+    await defaultGameRepository.updateGameMetadata(game.id, {
+      status: 'completed',
+    });
+    router.replace('/history');
+  };
+
   if (loading || !game) {
     return (
       <SafeAreaView
@@ -157,6 +167,14 @@ export default function GameSummaryScreen() {
           onCopyRow={handleCopyRow}
           onExportCsv={handleExportCsv}
         />
+
+        {game.status === 'active' && (
+          <SecondaryButton
+            title="Finish Game"
+            accessibilityLabel="Finish game and go to history"
+            onPress={handleFinishGame}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

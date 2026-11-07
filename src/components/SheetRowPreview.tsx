@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { SecondaryButton } from './SecondaryButton';
 
 export interface SheetRowPreviewProps {
   syncedToSheets: boolean;
@@ -49,25 +50,13 @@ export function SheetRowPreview({
           ]}
         >
           <Text style={styles.primaryActionTitle}>Copy Data Row (TSV)</Text>
-          <Text style={styles.primaryActionSub}>
-            Copies tab-separated row to clipboard
-          </Text>
         </Pressable>
 
-        <Pressable
-          accessibilityRole="button"
+        <SecondaryButton
+          title="Export CSV"
           accessibilityLabel="Export CSV file"
           onPress={onExportCsv}
-          style={({ pressed }) => [
-            styles.secondaryButton,
-            pressed && styles.pressed,
-          ]}
-        >
-          <Text style={styles.secondaryButtonTitle}>Export CSV</Text>
-          <Text style={styles.secondaryButtonSub}>
-            Download / Share .csv if needed
-          </Text>
-        </Pressable>
+        />
       </View>
     </View>
   );
@@ -140,26 +129,6 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 2,
     textAlign: 'center',
-  },
-  secondaryButton: {
-    backgroundColor: '#2C2C2E',
-    borderRadius: 12,
-    minHeight: 50,
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  secondaryButtonTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#0A84FF',
-  },
-  secondaryButtonSub: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#8E8E93',
-    marginTop: 2,
   },
   pressed: {
     opacity: 0.7,
